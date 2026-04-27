@@ -1,4 +1,6 @@
-# QAMule
+<p align="center">
+    <img src="logo.svg" alt="logo.svg" width="200">
+</p>
 
 AI-powered GitHub Copilot extension that explores, understands, and tests Android apps autonomously.
 
