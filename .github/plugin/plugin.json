@@ -1,0 +1,8 @@
+{
+  "name": "QAMule",
+  "description": "AI-powered GitHub Copilot extension that explores, understands, and tests Android apps autonomously.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Lanbao Shen"
+  }
+}
