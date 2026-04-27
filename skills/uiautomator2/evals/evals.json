@@ -1,0 +1,29 @@
+{
+  "skill_name": "uiautomator2",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I need to automate opening the Settings app on my Android phone and navigating to Wi-Fi settings. Give me the exact u2cli commands to run. Assume the project is already set up (uv sync done).",
+      "expected_output": "A sequence of u2cli shell commands using app-start, wait, and click to open Settings and navigate to Wi-Fi/Network settings, using .venv/bin/u2cli prefix.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "I'm trying to log into my app com.example.myapp on Android. The login screen has a username field with resource-id 'com.example.myapp:id/et_username', a password field 'com.example.myapp:id/et_password', and a login button with text 'Sign In'. Give me a complete u2cli script to launch the app fresh (clear state), wait for the login screen, enter credentials, and tap Sign In. My test device serial is emulator-5554.",
+      "expected_output": "A complete sequence of u2cli commands targeting emulator-5554: app-start with --wait --stop (or app-clear first), wait for login screen, click username field, send-keys for username, click password field, send-keys for password, click 'Sign In'. Commands should use -s emulator-5554 or ANDROID_SERIAL.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "My Android app has a long scrollable list and I need to scroll down until I find an item called 'Advanced Settings', then click it. Also, before doing this I need to take a screenshot to see what's on the screen. How do I do this with u2cli?",
+      "expected_output": "Commands for: screenshot, then scroll --scrollable --to-text 'Advanced Settings', then click --text 'Advanced Settings'. May include dump-hierarchy to inspect the list first.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "How do I set up the project to use u2cli? I just cloned the AutoQA-Android repo and need to get u2cli working on my machine.",
+      "expected_output": "Instructions to run 'uv sync' to create .venv and install dependencies, then use .venv/bin/u2cli or activate the venv first. Should mention the pyproject.toml defines uiautomator2-cli as a dependency.",
+      "files": []
+    }
+  ]
+}
