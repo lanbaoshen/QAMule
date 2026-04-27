@@ -1,0 +1,12 @@
+[project]
+name = "{{PROJECT_NAME}}"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "pytest>=9.0.3",
+    "uiautomator2>=3.5.0",
+    "uiautomator2-cli>=0.1.2",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
