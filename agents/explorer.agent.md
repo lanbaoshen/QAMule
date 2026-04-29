@@ -2,7 +2,7 @@
 description: "Explore a new Android app feature on a live device, solidify the exploration into a pytest test script, and persist knowledge to kb. Use when: a new feature needs to be tested and no script exists yet, 探索新功能, 写新测试, 发现UI流程, 为某功能写测试脚本."
 name: "Explorer"
 tools: [execute, read, edit, search, todo]
-user-invocable: true
+user-invocable: false
 argument-hint: "Describe the feature or flow to explore, e.g. 'login flow for com.example.app'"
 ---
 

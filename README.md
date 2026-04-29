@@ -59,23 +59,22 @@ For example:
 
 This scaffolds the full project structure — `tests/`, `kb/`, `actions/`, `helpers/`, `conftest.py`, `pyproject.toml` — and runs `uv sync` to install dependencies.
 
-### 2. Use Agents to write or fix tests
+### 2. Use the Coordinator agent
 
-In VS Code Copilot Chat, switch to **Agent** mode and select one of the QAMule agents:
+In VS Code Copilot Chat, switch to **Agent** mode, select **Coordinator**, and describe what you want to test. Coordinator is the only agent you need to invoke directly — it automatically delegates to the specialist agents as needed.
 
-| Agent | Description |
-|---|---|
-| **Android Test Author** | Explores an app feature on a live device, writes a pytest test, extracts reusable actions, and updates the knowledge base. |
-| **Android Test Fixer** | Diagnoses a failing test, re-inspects the device UI, fixes the script, and updates KB if the app changed. |
+| Agent | Invoked by | Description |
+|---|---|---|
+| **Coordinator** | You | Main entry point. Checks if a test already exists, runs it, and routes work to the right specialist agent automatically. |
+| **Explorer** | Coordinator | Explores an app feature step-by-step on a live device, writes a validated pytest script, and persists discovered screens/flows to `kb/`. |
+| **First Responder** | Coordinator | Inspects the live failure scene when pytest is paused, classifies the root cause, validates a fix on the frozen device, then resumes the session. |
+| **Maintainer** | Coordinator | Diagnoses the root cause of a previously passing test that is now failing, applies the minimal fix, and updates `kb/` if the app UI changed. |
 
-Example prompts:
+Example prompt:
 
 ```
-# In Agent mode → select "Android Test Author"
+# In Agent mode → select "Coordinator"
 Test the login flow for com.example.myapp
-
-# In Agent mode → select "Android Test Fixer"
-Fix test_login.py — UiObjectNotFoundError on the submit button
 ```
 
 ## How It Works

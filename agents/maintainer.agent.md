@@ -2,7 +2,7 @@
 description: "Fix a failing Android pytest test that was previously passing. Diagnose root cause, inspect device if needed, apply minimal fix, update kb if the app UI changed. Use when: test is failing, test is red, pytest error, selector stale, UI changed, assertion failure, 测试失败, 脚本报错, 修复测试, fix test."
 name: "Maintainer"
 tools: [execute, read, edit, search, todo]
-user-invocable: true
+user-invocable: false
 argument-hint: "Paste the test failure output, or specify the test file/function that is failing"
 ---
 

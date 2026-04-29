@@ -2,7 +2,7 @@
 description: "Diagnose and fix a failing test while pytest is paused on failure and the device is frozen at the failure scene. The frozen device is a live sandbox — validate fixes directly on device before writing to code. Use when: pause-on-failure triggered, test paused, device frozen at failure, 测试暂停, 失败现场, pause on failure."
 name: "First Responder"
 tools: [execute, read, edit, search, todo]
-user-invocable: true
+user-invocable: false
 argument-hint: "Paste the pytest failure output from the paused session"
 ---
 
