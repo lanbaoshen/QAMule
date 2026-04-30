@@ -24,7 +24,7 @@ kb can be used **before** starting a distillation session to generate task instr
 
 ## Output Format
 
-You produce a trajectory file at `dataset/{session_id}/trajectory.json`.
+You produce a trajectory file at `dataset/{scenario_type}/{session_dir}/trajectory.json`, where `scenario_type` is either `normal` or `edge_cases`.
 
 ### Trajectory file schema
 
@@ -88,10 +88,11 @@ pixel_y = normalized_y * screen_height / 1000
 
 ### Phase 0: Setup
 
-1. Generate a session ID from the task instruction: `{task_slug}_{YYYYMMDD}_{HHMMSS}`. The `task_slug` is a short snake_case summary of the instruction (e.g. `open_bluetooth`, `send_wechat_message`). Keep it under 40 characters, ASCII only.
-2. Create the session directory:
+1. Determine the **scenario type**: is this a `normal` flow (happy path, standard user journey) or an `edge_cases` flow (error recovery, permission denied, network failure, unusual state, boundary condition)? Infer from the task description; if ambiguous, ask the user before proceeding.
+2. Compose the session directory name: `{task_slug}_{YYYYMMDD}_{HHMMSS}`. The `task_slug` is a short snake_case summary of the instruction (e.g. `open_bluetooth`, `send_wechat_message`). Keep it under 40 characters, ASCII only. This value is referred to as `{session_dir}` throughout the rest of this document.
+3. Create the session directory:
    ```bash
-   mkdir -p dataset/{session_id}
+   mkdir -p dataset/{scenario_type}/{session_dir}
    ```
 3. Get device info:
    ```bash
@@ -110,7 +111,7 @@ pixel_y = normalized_y * screen_height / 1000
 
    a. **Screenshot** and **current app**:
    ```bash
-   .venv/bin/u2cli screenshot dataset/{session_id}/step_{NNN}.png
+   .venv/bin/u2cli screenshot dataset/{scenario_type}/{session_dir}/step_{NNN}.png
    .venv/bin/u2cli current-app
    ```
    Record the `package` and `activity` as the step's `screen` field.
@@ -136,7 +137,7 @@ pixel_y = normalized_y * screen_height / 1000
 
 7. Take a **final screenshot** to capture the end state:
    ```bash
-   .venv/bin/u2cli screenshot dataset/{session_id}/step_{NNN}_final.png
+   .venv/bin/u2cli screenshot dataset/{scenario_type}/{session_dir}/step_{NNN}_final.png
    ```
 8. View the final screenshot and **verify** the task outcome. Record the last step with action `finish` (task done) or `impossible` (cannot complete), including the `reason`.
 
@@ -144,9 +145,9 @@ pixel_y = normalized_y * screen_height / 1000
 
 9. Write the full trajectory JSON object to:
    ```
-   dataset/{session_id}/trajectory.json
+   dataset/{scenario_type}/{session_dir}/trajectory.json
    ```
-10. Report summary: task, steps taken, success/impossible, session directory path.
+10. Report summary: task, scenario type, steps taken, success/impossible, session directory path.
 
 ## Important Notes
 
