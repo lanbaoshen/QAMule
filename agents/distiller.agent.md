@@ -68,14 +68,17 @@ The file contains exactly one JSON object per session:
 
 | type | params | u2cli command |
 |------|--------|---------------|
+| `app_start` | `app` (package name) | `app-start {package} --wait --stop` |
 | `click` | `x, y` (0–1000) | `click-coord {px} {py}` |
 | `long_click` | `x, y` (0–1000) | `long-click-coord {px} {py}` |
 | `swipe` | `x1, y1, x2, y2` (0–1000) | `swipe {px1} {py1} {px2} {py2}` |
 | `type` | `text` | `send-keys "{text}"` |
 | `press` | `key` | `press {key}` |
 | `scroll` | `direction` (up/down/left/right) | `swipe-ext {direction}` |
-| `finish` | `reason` | — (end session) |
-| `impossible` | `reason` | — (end session) |
+| `finish` | `reason` | — (terminal: ends session) |
+| `impossible` | `reason` | — (terminal: ends session) |
+
+> **`finish` and `impossible` are TERMINAL actions.** They MUST be the very last step in the trajectory. No steps may follow them. Never use `finish` to describe an intermediate state mid-task.
 
 ### Coordinate conversion
 
@@ -103,10 +106,18 @@ pixel_y = normalized_y * screen_height / 1000
 
 ### Phase 1: Execute the task
 
-4. Launch the app if needed:
+4. **Always record app launch as step 1.** Launch the app:
    ```bash
    .venv/bin/u2cli app-start {package} --wait --stop
    ```
+   Record this as the first trajectory step:
+   ```json
+   {"step": 1, "screenshot": "step_001.png", "screen": {"package": "...", "activity": "..."}, "thought": "启动 {app_name} 应用。", "action": {"type": "app_start", "app": "{package}"}}
+   ```
+   Take the step 1 screenshot **after** the app has launched (i.e. after `app-start` completes).
+
+   If the task requires re-launching the app mid-flow (e.g. returning from system settings), record another `app_start` step at that point — it is a valid, non-terminal action.
+
 5. **Loop** (max 30 steps):
 
    a. **Screenshot** and **current app**:
