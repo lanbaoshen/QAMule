@@ -129,16 +129,16 @@ pixel_y = normalized_y * screen_height / 1000
 
    f. **Record** the step (screenshot path, thought, action with normalized coords).
 
-   g. If the task appears complete or impossible → proceed to step 6.
+   g. If the task appears complete or impossible → **rename** the screenshot taken in step 5a to `step_{NNN}_final.png` and proceed to step 8. Do NOT take another screenshot.
+   ```bash
+   mv dataset/{scenario_type}/{session_dir}/step_{NNN}.png dataset/{scenario_type}/{session_dir}/step_{NNN}_final.png
+   ```
 
 6. **Stuck detection**: if 3 consecutive screenshots look identical, stop and proceed to step 7 with `impossible`.
 
 ### Phase 1.5: Declare completion
 
-7. Take a **final screenshot** to capture the end state:
-   ```bash
-   .venv/bin/u2cli screenshot dataset/{scenario_type}/{session_dir}/step_{NNN}_final.png
-   ```
+7. *(Already done in step 5g — the last screenshot was renamed to `step_{NNN}_final.png`.)*
 8. View the final screenshot and **verify** the task outcome. Record the last step with action `finish` (task done) or `impossible` (cannot complete), including the `reason`.
 
 ### Phase 2: Save trajectory
@@ -153,5 +153,6 @@ pixel_y = normalized_y * screen_height / 1000
 
 - `success` field is always `null` — human reviewers will fill it in.
 - Keep `thought` natural and descriptive. It becomes the CoT training signal.
+- **NEVER use bare ASCII double-quotes (`"`) inside `thought`, `reason`, or `instruction` field values.** They break JSON string parsing. Escape them as `\"` instead (e.g. `\"取消\"`, `\"查看路线\"`).
 - If you misclick and end up on a wrong screen, recover naturally (press back, re-navigate). These recovery steps are valuable training data too.
 - Do not optimize for fewest steps. Operate like a careful human would.
