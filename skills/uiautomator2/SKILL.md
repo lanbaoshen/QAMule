@@ -15,6 +15,8 @@ description: >
 
 You have access to `.venv/bin/u2cli`, a CLI for controlling Android devices via uiautomator2.
 
+> **Read the full skill file before using any commands. This file has almost 200+ lines**
+
 > **Device unavailable**: If no devices are detected, respond: "No devices detected. Please connect a device and ensure `adb devices` lists it before retrying."
 
 ## Setup (required first time)
@@ -48,6 +50,8 @@ Global flags: `--json` for JSON output.
 
 > Every `u2cli` command prints equivalent Python code — copy it into a script for multi-step automation.
 
+> Using `click-coord` when the target element has no selectable attributes. You must determine the element coordinates based on the actual resolution of the image.
+
 ### Quick element lookup
 
 Use grep to filter `dump-hierarchy` output and locate element attributes fast:
@@ -67,7 +71,7 @@ The hierarchy output shows indented nodes with attributes like `text=`, `resourc
 | Type | `send-keys`, `set-text`, `clear-text` | `.venv/bin/u2cli send-keys "hello"` |
 | Swipe/Scroll | `swipe`, `swipe-ext`, `swipe-element`, `scroll` | `.venv/bin/u2cli swipe-ext up` |
 | Keys | `press` | `.venv/bin/u2cli press back` |
-| Apps | `app-start`, `app-stop`, `app-list`, `app-list-running`, `app-info`, `app-clear`, `app-install`, `app-uninstall`, `app-wait` | `.venv/bin/u2cli app-start com.android.settings` |
+| Apps | `app-start`, `app-stop`, `app-list`, `app-list-running`, `app-info`, `app-clear`, `app-install`, `app-uninstall`, `app-wait` | `.venv/bin/u2cli app-start com.android.settings --wait --stop` |
 | Wait/Check | `wait`, `exists`, `xpath-exists` | `.venv/bin/u2cli wait --text "Done" --timeout 10` |
 | Read | `get-text`, `xpath-get-text`, `element-info`, `device-info`, `window-size`, `ui-info` | `.venv/bin/u2cli get-text --resource-id "com.app:id/label"` |
 | Screen | `screen-on`, `screen-off`, `orientation`, `screenshot` | `.venv/bin/u2cli screenshot /tmp/s.png` |
