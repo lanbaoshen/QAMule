@@ -13,6 +13,8 @@ description: >
 
 # uiautomator2 Android Automation
 
+> **REQUIRED**: Read this entire file from top to bottom before executing any commands. Do not start acting until you have finished reading the end of this file.
+
 You have access to `.venv/bin/u2cli`, a CLI for controlling Android devices via uiautomator2.
 
 > **Device unavailable**: If no devices are detected, respond: "No devices detected. Please connect a device and ensure `adb devices` lists it before retrying."
@@ -43,6 +45,10 @@ Global flags: `--json` for JSON output.
 3. **Verify** — use `exists`, `wait`, or `screenshot` to confirm result
 
 > **IMPORTANT**: Each `u2cli` command must be run separately. Do not combine commands in a single terminal line.
+
+> For full details, see [commands reference](./references/commands.md).
+
+> Every `u2cli` command prints equivalent Python code — copy it into a script for multi-step automation.
 
 ### Quick element lookup
 
@@ -87,24 +93,3 @@ Most commands that target UI elements accept these options (combinable):
 | `--index N` | Sibling index |
 | `--instance N` | Nth match (0-based) when multiple elements match |
 | `--clickable`, `--scrollable`, `--enabled`, `--focused`, `--checked`, `--selected`, `--checkable` | Boolean state flags |
-
-## Key command details
-
-For full details, see [commands reference](./references/commands.md). Highlights:
-
-- **`click`** / **`long-click`**: accepts `--timeout` for waiting before click; `long-click` has `--duration`
-- **`click-coord X Y`**: pixel coords or **0.0–1.0** relative; **`double-click X Y`** has `--duration` (delay between taps)
-- **`send-keys TEXT`**: types into focused field, clears first; use `--no-clear` to append
-- **`set-text TEXT`**: sets text on a specific element (uses selectors)
-- **`swipe FX FY TX TY`**: coords can be **0-1** relative or pixels; `--duration` or `--steps`
-- **`swipe-ext {left|right|up|down}`**: `--scale` controls distance (fraction of screen). **Direction = finger movement**, which is opposite to content movement: `up` scrolls content DOWN (see more below); `down` scrolls content UP (go back to top); `left` scrolls content RIGHT (next page/tab); `right` scrolls content LEFT (previous page/tab). To scroll down a list and reveal more items, use `swipe-ext up`. To go to the next page, use `swipe-ext left`.
-- **`swipe-element`**: swipe on a specific element; `--direction` required, `--steps`
-- **`wait`**: `--timeout`, `--gone` (wait for disappearance)
-- **`app-start PACKAGE`**: `--activity`, `--wait`, `--stop`
-- **`app-wait PACKAGE`**: `--timeout`, `--front` (wait for foreground)
-- **`dump-hierarchy`**: Get current UI tree;
-- **`press KEY`**: named keys: `home`, `back`, `menu`, `enter`, `delete`, `recent`, `volume_up`, `volume_down`, `power`, `camera`, `search`, `space`; or integer keycode
-
-## Scripting tip
-
-Every `u2cli` command prints equivalent Python code — copy it into a script for multi-step automation.
