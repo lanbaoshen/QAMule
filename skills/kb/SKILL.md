@@ -43,7 +43,10 @@ kb/
 
 Update KB only when you discover something new (screen, selector, flow, quirk, or dependency). Skip otherwise.
 
-- New screen → `kb/app/screens/{name}.md`
+**Before writing, classify ownership:** check `current-app` (or the foreground package) against the main app package in `kb/app/_app.md`. If the screen belongs to a different package, it is a **dependency** — write to `kb/deps/{package}/`, NOT `kb/app/screens/`.
+
+- New screen (main app) → `kb/app/screens/{name}.md`
+- New screen (other app) → `kb/deps/{package}/{name}.md`
 - New flow → `kb/app/flows/{name}.md`
 - New dependency → `kb/deps/{package}/`
 - Quirk → append to `kb/app/_app.md` under "Known Issues & Quirks"
