@@ -12,10 +12,11 @@ Use the `kb skill` to get the information about the app under test, and update i
 
 ## Core Workflow
 
-Repeat: **Observe → Plan → Act → Verify → Learn**
+Repeat: **Observe → Plan → Act → Verify → Learn → Record**
 
 1. **Observe** — Screenshot first. Use hierarchy/ui-info only when needed for element details.
 2. **Plan** — Match visible elements to test goal. Consult KB for known selectors before exploring.
 3. **Act** — One `u2cli` command per step.
 4. **Verify** — Screenshot or `exists`/`wait` to confirm success. Report unexpected behavior.
 5. **Learn** — If new information was discovered, update KB.
+6. **Record** — When a purposeful test scenario completes successfully, use `pytest skill` to generate a test script. Skip for exploratory, failed, or user-declined tasks. Generate per scenario, not batched. **After generating the test script, always run it with `pytest -v` to verify it passes.**

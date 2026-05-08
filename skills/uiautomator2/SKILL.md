@@ -13,8 +13,6 @@ description: >
 
 # uiautomator2 Android Automation
 
-> **REQUIRED**: Read this entire file from top to bottom before executing any commands. Do not start acting until you have finished reading the end of this file.
-
 You have access to `.venv/bin/u2cli`, a CLI for controlling Android devices via uiautomator2.
 
 > **Device unavailable**: If no devices are detected, respond: "No devices detected. Please connect a device and ensure `adb devices` lists it before retrying."
