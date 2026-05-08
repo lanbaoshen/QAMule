@@ -1,6 +1,6 @@
 ---
 name: pytest
-description: "Generate pytest test scripts from successful device operations. Use when the QA agent completes a purposeful test scenario (not exploration) and the user wants a reusable, repeatable test. Trigger keywords: generate test, record test, save as test, create test script, pytest."
+description: "Generate pytest test scripts from successful device operations. Use when the QA agent completes a purposeful test scenario (not exploration) and the user wants a reusable, repeatable test or execute tests. Trigger keywords: generate test, record test, save as test, create test script, execute tests, pytest."
 ---
 
 # Pytest Recorder

@@ -3,7 +3,7 @@
 ## Basic
 
 ```bash
-pytest tests/test_xxx.py -v
+.venv/bin/pytest tests/test_xxx.py -v --pause-on-failure
 ```
 
 ## Device Selection
@@ -12,10 +12,10 @@ Default connects to the only attached device. For multiple devices use `--device
 
 ```bash
 # Single named device
-pytest --device phone:emulator-5554
+.venv/bin/pytest --device phone:emulator-5554 --pause-on-failure
 
 # Multiple devices
-pytest --device phone:emulator-5554 --device tablet:192.168.1.100
+.venv/bin/pytest --device phone:emulator-5554 --device tablet:192.168.1.100 --pause-on-failure
 ```
 
 Tests reference the device by fixture name matching the `NAME` part:
@@ -30,7 +30,7 @@ If no `--device` is specified, a fixture named `d` is auto-registered connecting
 ## Pause on Failure
 
 ```bash
-pytest tests/test_xxx.py -v --pause-on-failure
+.venv/bin/pytest tests/test_xxx.py -v --pause-on-failure
 ```
 
 When a test fails:
