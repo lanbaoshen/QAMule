@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 90" width="200" height="180" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">QAMule Vertical Logo</title>
+  <defs>
+    <linearGradient id="rainbow" x1="0" y1="2" x2="0" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%"   stop-color="#FF4466"/>
+      <stop offset="17%"  stop-color="#FF9900"/>
+      <stop offset="33%"  stop-color="#FFE600"/>
+      <stop offset="50%"  stop-color="#44DD44"/>
+      <stop offset="67%"  stop-color="#00CCFF"/>
+      <stop offset="83%"  stop-color="#4488FF"/>
+      <stop offset="100%" stop-color="#CC44FF"/>
+    </linearGradient>
+    <style>
+      .px  { fill: url(#rainbow); }
+      .snout { fill: rgba(255,255,255,0.15); }
+      .eye-white { fill: #ffffff; }
+      .brand { font-family: 'Courier New', Courier, monospace; font-weight: 700; }
+      .tagline { font-family: 'Courier New', Courier, monospace; }
+    </style>
+  </defs>
+  <rect fill="#111111" x="0" y="0" width="100" height="90"/>
+
+  <!-- === PIXEL ART MULE centered at top === -->
+  <!-- 3px pixel size, centered around x=50 -->
+
+  <!-- Ears -->
+  <rect class="px" x="25" y="2"  width="4" height="4"/>
+  <rect class="px" x="29" y="2"  width="4" height="4"/>
+  <rect class="px" x="67" y="2"  width="4" height="4"/>
+  <rect class="px" x="71" y="2"  width="4" height="4"/>
+
+  <rect class="px" x="25" y="6"  width="4" height="4"/>
+  <rect class="px" x="29" y="6"  width="4" height="4"/>
+  <rect class="px" x="67" y="6"  width="4" height="4"/>
+  <rect class="px" x="71" y="6"  width="4" height="4"/>
+
+  <!-- Head top -->
+  <rect class="px" x="25" y="10" width="12" height="4"/>
+  <rect class="px" x="63" y="10" width="12" height="4"/>
+
+  <!-- Head -->
+  <rect class="px" x="21" y="14" width="16" height="4"/>
+  <rect class="px" x="63" y="14" width="16" height="4"/>
+
+  <!-- Eye row -->
+  <rect class="px" x="21" y="18" width="58" height="4"/>
+  <rect class="eye-white" x="25" y="18" width="4" height="4"/>
+  <rect class="eye-white" x="71" y="18" width="4" height="4"/>
+  <rect fill="#111111" x="26" y="19" width="2" height="2"/>
+  <rect fill="#111111" x="72" y="19" width="2" height="2"/>
+
+  <!-- Snout top -->
+  <rect class="px" x="21" y="22" width="58" height="4"/>
+  <!-- Snout face -->
+  <rect class="px" x="21" y="26" width="58" height="4"/>
+  <rect class="snout" x="29" y="26" width="42" height="8"/>
+  <!-- Nostrils -->
+  <rect class="px" x="32" y="28" width="5" height="3"/>
+  <rect class="px" x="63" y="28" width="5" height="3"/>
+
+  <!-- Chin -->
+  <rect class="px" x="29" y="34" width="42" height="4"/>
+
+  <!-- Neck -->
+  <rect class="px" x="37" y="38" width="26" height="4"/>
+
+  <!-- Body -->
+  <rect class="px" x="21" y="42" width="58" height="8"/>
+
+  <!-- Legs -->
+  <rect class="px" x="21" y="50" width="10" height="6"/>
+  <rect class="px" x="35" y="50" width="10" height="6"/>
+  <rect class="px" x="55" y="50" width="10" height="6"/>
+  <rect class="px" x="69" y="50" width="10" height="6"/>
+
+  <!-- Hooves -->
+  <rect class="px" x="21" y="56" width="10" height="4"/>
+  <rect class="px" x="35" y="56" width="10" height="4"/>
+  <rect class="px" x="55" y="56" width="10" height="4"/>
+  <rect class="px" x="69" y="56" width="10" height="4"/>
+
+  <!-- Tail -->
+  <rect class="px" x="75" y="42" width="4" height="4"/>
+  <rect class="px" x="79" y="46" width="4" height="4"/>
+  <rect class="px" x="79" y="50" width="4" height="4"/>
+
+  <!-- === WORDMARK below icon === -->
+  <text x="50" y="76" class="brand" font-size="16" fill="#ffffff" text-anchor="middle" letter-spacing="2">QAMule</text>
+</svg>
