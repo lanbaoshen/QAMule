@@ -128,7 +128,7 @@ body {
 .btn-open {
   background: none;
   border: 1px solid var(--border);
-  border-radius: 0;
+  border-radius: 6px;
   color: var(--text-muted);
   cursor: pointer;
   padding: 6px 14px;
@@ -143,15 +143,7 @@ body {
 .btn-group {
   display: inline-flex;
   flex-shrink: 0;
-}
-
-.btn-group .btn-open {
-  border-radius: 6px 0 0 6px;
-  border-right-width: 0;
-}
-
-.btn-group .btn-delete {
-  border-radius: 0 6px 6px 0;
+  gap: 8px;
 }
 
 .btn-delete:hover,
@@ -597,6 +589,46 @@ body {
   pointer-events: none;
 }
 
+/* Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  cursor: zoom-out;
+  animation: lbFadeIn 0.2s ease;
+}
+
+@keyframes lbFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox-overlay .lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.lightbox-overlay .lightbox-content img {
+  display: block;
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  width: auto;
+  height: auto;
+}
+
+.screenshot-wrap {
+  cursor: zoom-in;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
@@ -813,7 +845,7 @@ function renderTrajectory(traj, basePath) {
     // Screenshot
     if (step.screenshot) {
       const imgSrc = `${BASE}/data/${dir}/${step.screenshot}`;
-      html += `<div class="screenshot-wrap" onclick="openLightbox('${imgSrc}')">`;
+      html += `<div class="screenshot-wrap" onclick="openLightbox(this)">`;
       html += `<img src="${imgSrc}" alt="Step ${step.step}" loading="lazy">`;
       if ((actionType === 'click' || actionType === 'long_click') && step.action.x != null) {
         const x = step.action.x / devW * 100;
@@ -897,6 +929,25 @@ function renderSwipeArrow(x1, y1, x2, y2, vw, vh) {
   </svg>`;
 }
 
+function openLightbox(el) {
+  const overlay = document.createElement('div');
+  overlay.className = 'lightbox-overlay';
+  const clone = el.cloneNode(true);
+  clone.className = 'lightbox-content';
+  clone.style.maxWidth = '';
+  clone.style.cursor = '';
+  clone.removeAttribute('onclick');
+  overlay.appendChild(clone);
+  overlay.addEventListener('click', () => overlay.remove());
+  document.addEventListener('keydown', function handler(e) {
+    if (e.key === 'Escape') {
+      overlay.remove();
+      document.removeEventListener('keydown', handler);
+    }
+  });
+  document.body.appendChild(overlay);
+}
+
 function esc(s) {
   if (!s) return '';
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -907,13 +958,18 @@ document.getElementById('btn-refresh').addEventListener('click', () => loadIndex
 let currentPath = null;
 
 async function openFile(path) {
-  const res = await fetch(`${BASE}/api/open`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ path })
-  });
-  if (!res.ok) {
-    alert('Failed to open: ' + (await res.text()));
+  try {
+    const res = await fetch(`${BASE}/api/open`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path })
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      alert('Failed to open: ' + (data?.error || res.statusText));
+    }
+  } catch (e) {
+    alert('Failed to open: ' + (e?.message || e));
   }
 }
 
@@ -1057,8 +1113,8 @@ class ViewerHandler(SimpleHTTPRequestHandler):
         body = self.rfile.read(length)
         try:
             data = json.loads(body)
-        except json.JSONDecodeError:
-            self.send_error(400, "Invalid JSON")
+        except (json.JSONDecodeError, ValueError):
+            self._send_json_error(400, "Invalid JSON")
             return
 
         rel_path = data.get("path", "")
@@ -1067,13 +1123,13 @@ class ViewerHandler(SimpleHTTPRequestHandler):
         try:
             target.resolve().relative_to(self.dataset_dir.resolve())
         except ValueError:
-            self.send_error(403)
+            self._send_json_error(403, "Forbidden")
             return
 
         # Open the session directory (parent of trajectory.json)
         session_dir = target.parent if target.name == "trajectory.json" else target
         if not session_dir.exists():
-            self.send_error(404)
+            self._send_json_error(404, f"Directory not found: {rel_path}")
             return
 
         try:
@@ -1084,7 +1140,7 @@ class ViewerHandler(SimpleHTTPRequestHandler):
             else:
                 subprocess.Popen(["xdg-open", str(session_dir)])
         except OSError as e:
-            self.send_error(500, str(e))
+            self._send_json_error(500, str(e))
             return
 
         self.send_response(200)
@@ -1154,6 +1210,14 @@ class ViewerHandler(SimpleHTTPRequestHandler):
     def _send_json(self, data):
         content = json.dumps(data, ensure_ascii=False, indent=None).encode("utf-8")
         self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        self.wfile.write(content)
+
+    def _send_json_error(self, code, message):
+        content = json.dumps({"error": message}, ensure_ascii=False).encode("utf-8")
+        self.send_response(code)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(content)))
         self.end_headers()
