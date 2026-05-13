@@ -1,180 +1,169 @@
-# u2cli Complete Command Reference
+# u2cli Commands Reference
 
-## Click elements
+This reference captures the full command surface of `.venv/bin/u2cli` for this repository.
+
+## Global Usage
 
 ```bash
-# Click by text (exact match)
-.venv/bin/u2cli click --text "Settings"
-
-# Click by text containing a substring
-.venv/bin/u2cli click --text-contains "Submit"
-
-# Click by resource-id
-.venv/bin/u2cli click --resource-id "com.android.settings:id/search"
-
-# Click by content description (accessibility label)
-.venv/bin/u2cli click --description "Navigate up"
-
-# Click with timeout (wait for element before clicking)
-.venv/bin/u2cli click --text "OK" --timeout 10
-
-# Long-click an element (with custom duration)
-.venv/bin/u2cli long-click --text "Item" --duration 2.0
-
-# Click by XPath
-.venv/bin/u2cli xpath-click "//android.widget.Button[@text='OK']"
-
-# Click at absolute coordinates (pixels) or relative (0.0–1.0)
-.venv/bin/u2cli click-coord 540 960
-.venv/bin/u2cli click-coord 0.5 0.5
-
-# Double-click at coordinates
-.venv/bin/u2cli double-click 540 960 --duration 0.1
+.venv/bin/u2cli [OPTIONS] COMMAND [ARGS]...
 ```
 
-## Type and edit text
+Global options:
+- `-s, --serial TEXT`: target device serial (or use `ANDROID_SERIAL`)
+- `--help`: show help
 
-```bash
-# Type into the focused field (clears first by default)
-.venv/bin/u2cli send-keys "Hello World"
+## Complete Command List
 
-# Type without clearing
-.venv/bin/u2cli send-keys --no-clear " extra"
+### App Lifecycle
 
-# Set text directly on a specific element
-.venv/bin/u2cli set-text "new value" --resource-id "com.app:id/input"
+| Command | Description |
+| --- | --- |
+| `app-start` | Start (launch) an Android app by package name. |
+| `app-wait` | Wait until an app is running (or in foreground with `--front`). |
+| `app-stop` | Force-stop an app (or all third-party apps with `--all`). |
+| `app-list` | List installed packages. |
+| `app-list-running` | List currently running packages. |
+| `app-info` | Get app version info (`versionName`, `versionCode`). |
+| `app-clear` | Clear app data (`pm clear <package>`). |
+| `app-install` | Install an APK from a local path or URL. |
+| `app-uninstall` | Uninstall an app by package name. |
 
-# Clear text from an element
-.venv/bin/u2cli clear-text --resource-id "com.app:id/input"
-```
+### UI Element Actions
 
-## Swipe and scroll
+| Command | Description |
+| --- | --- |
+| `click` | Click on a UI element matching selector options. |
+| `long-click` | Long-click on a UI element. |
+| `click-coord` | Click at absolute or relative (`0-1`) coordinates. |
+| `long-click-coord` | Long-click at absolute or relative (`0-1`) coordinates. |
+| `double-click` | Double-click at coordinates. |
+| `swipe` | Swipe from `(FX, FY)` to `(TX, TY)`. |
+| `swipe-ext` | High-level directional swipe across the screen. |
+| `swipe-element` | Swipe on a matched UI element in a direction. |
+| `wait` | Wait for an element to appear (or disappear with `--gone`). |
+| `exists` | Check whether a UI element exists. |
 
-```bash
-# Swipe from one point to another (pixel coords or 0-1 relative)
-.venv/bin/u2cli swipe 0.5 0.8 0.5 0.2          # swipe up (scroll down)
-.venv/bin/u2cli swipe 0.5 0.2 0.5 0.8          # swipe down (scroll up)
-.venv/bin/u2cli swipe 200 800 200 200 --duration 0.5
+### Text Operations
 
-# High-level directional swipe across the screen
-.venv/bin/u2cli swipe-ext up                    # scroll down the page
-.venv/bin/u2cli swipe-ext down                  # scroll up the page
-.venv/bin/u2cli swipe-ext left --scale 0.8      # swipe left 80% of screen width
-.venv/bin/u2cli swipe-ext right
+| Command | Description |
+| --- | --- |
+| `send-keys` | Type text into the currently focused input field. |
+| `set-text` | Set text on a matched UI element (clears first). |
+| `clear-text` | Clear text from a matched UI element. |
+| `get-text` | Get text from a matched UI element. |
 
-# Swipe on a specific element
-.venv/bin/u2cli swipe-element --direction up --resource-id "com.app:id/card"
-.venv/bin/u2cli swipe-element --direction left --text "Dismiss" --steps 20
+### XPath Operations
 
-# Scroll a scrollable element
-.venv/bin/u2cli scroll --scrollable --action forward
-.venv/bin/u2cli scroll --resource-id "com.app:id/list" --action toEnd
-.venv/bin/u2cli scroll --scrollable --to-text "Item 50"  # scroll until text is visible
-.venv/bin/u2cli scroll --scrollable --action backward --direction horiz
-```
+| Command | Description |
+| --- | --- |
+| `xpath-click` | Click an element found by XPath. |
+| `xpath-exists` | Check whether an XPath element exists. |
+| `xpath-get-text` | Get text from an XPath element. |
+| `xpath-set-text` | Set text on an XPath element. |
 
-## Press hardware/soft keys
+### Device, UI, and System
 
-```bash
-# Named keys: home, back, menu, enter, delete, recent,
-#             volume_up, volume_down, power, camera, search, space
-.venv/bin/u2cli press back
-.venv/bin/u2cli press home
-.venv/bin/u2cli press enter
-.venv/bin/u2cli press volume_up
+| Command | Description |
+| --- | --- |
+| `current-app` | Show the current foreground app (package/activity/pid). |
+| `device-info` | Show device information. |
+| `ui-info` | Show UiAutomator device info (size, orientation, package). |
+| `window-size` | Get screen window size (`width`, `height`). |
+| `orientation` | Get or set screen orientation. |
+| `element-info` | Get detailed info for a matched UI element. |
+| `dump-hierarchy` | Dump current UI hierarchy (simplified tree by default). |
+| `screenshot` | Take a screenshot and save to a file. |
+| `open-notification` | Pull down notification shade. |
+| `open-quick-settings` | Pull down quick settings panel. |
+| `open-url` | Open URL in the default browser via intent. |
+| `press` | Press hardware/soft key by name or keycode. |
+| `shell` | Run a shell command on device. |
+| `screen-on` | Turn screen on (wake). |
+| `screen-off` | Turn screen off (sleep). |
 
-# By keycode integer
-.venv/bin/u2cli press 3    # HOME keycode
-```
+### Runtime and Daemon
 
-## App management
+| Command | Description |
+| --- | --- |
+| `repl` | Run interactive u2cli commands without repeated process startup. |
+| `daemon` | Manage the background daemon process. |
 
-```bash
-# Start an app by package name
-.venv/bin/u2cli app-start com.android.settings
-.venv/bin/u2cli app-start com.example.myapp --activity .MainActivity
-.venv/bin/u2cli app-start com.example.myapp --wait --stop  # stop first, then start and wait
+`daemon` subcommands:
+- `daemon start`: start daemon for current serial
+- `daemon status`: show daemon status
+- `daemon logs`: show daemon log tail
+- `daemon stop`: stop daemon
 
-# Wait for app to be running / in foreground
-.venv/bin/u2cli app-wait com.example.myapp --timeout 15
-.venv/bin/u2cli app-wait com.example.myapp --front  # wait for foreground
+## Common Selector Options
 
-# Stop an app
-.venv/bin/u2cli app-stop com.example.myapp
+These options are shared by many element-based commands (such as `click`, `exists`, `wait`, `set-text`, `clear-text`, `get-text`, `element-info`, `scroll`, `swipe-element`):
 
-# List installed / running apps
-.venv/bin/u2cli app-list
-.venv/bin/u2cli app-list-running
+| Option | Meaning |
+| --- | --- |
+| `--text` | Exact text match |
+| `--text-contains` | Text contains substring |
+| `--text-matches` | Text matches regex |
+| `--text-starts-with` | Text starts with prefix |
+| `--resource-id` | Resource ID (example: `com.pkg:id/btn`) |
+| `--class-name` | UI class name |
+| `--description` | Content description exact match |
+| `--description-contains` | Content description contains substring |
+| `--package` | Package name |
+| `--index` | Sibling index |
+| `--instance` | Global instance index (0-based) |
+| `--checkable` | Element is checkable |
+| `--checked` | Element is checked |
+| `--clickable` | Element is clickable |
+| `--scrollable` | Element is scrollable |
+| `--enabled` | Element is enabled |
+| `--focused` | Element is focused |
+| `--selected` | Element is selected |
 
-# Get app version info
-.venv/bin/u2cli app-info com.android.settings
+## Flat List (Alphabetical)
 
-# Clear app data (like "Clear Data" in settings)
-.venv/bin/u2cli app-clear com.example.myapp
-
-# Install / uninstall
-.venv/bin/u2cli app-install /path/to/app.apk
-.venv/bin/u2cli app-uninstall com.example.myapp
-```
-
-## Wait for elements
-
-```bash
-# Wait for an element to appear (default timeout 20s)
-.venv/bin/u2cli wait --text "Welcome" --timeout 10
-
-# Wait for an element to disappear
-.venv/bin/u2cli wait --text "Loading..." --gone --timeout 30
-
-# Check if an element exists right now (no waiting)
-.venv/bin/u2cli exists --resource-id "com.app:id/button"
-.venv/bin/u2cli xpath-exists "//android.widget.TextView[@text='Done']"
-```
-
-## Get information from elements
-
-```bash
-# Get text content of an element
-.venv/bin/u2cli get-text --resource-id "com.app:id/label"
-.venv/bin/u2cli xpath-get-text "//android.widget.TextView[@content-desc='status']"
-
-# Get full element details (bounds, class, enabled, etc.)
-.venv/bin/u2cli element-info --text "OK"
-
-# Get device info
-.venv/bin/u2cli device-info
-.venv/bin/u2cli window-size
-.venv/bin/u2cli ui-info
-```
-
-## Screen control
-
-```bash
-.venv/bin/u2cli screen-on
-.venv/bin/u2cli screen-off
-.venv/bin/u2cli screenshot /tmp/output.png
-.venv/bin/u2cli orientation             # get orientation
-.venv/bin/u2cli orientation portrait    # set orientation
-.venv/bin/u2cli open-notification       # pull down notification shade
-.venv/bin/u2cli open-quick-settings     # pull down quick settings
-.venv/bin/u2cli open-url "https://example.com"  # open URL via intent
-```
-
-## Dump hierarchy options
-
-```bash
-.venv/bin/u2cli dump-hierarchy                    # simplified tree (default)
-.venv/bin/u2cli dump-hierarchy --raw              # raw XML from uiautomator2
-.venv/bin/u2cli dump-hierarchy --max-depth 3      # limit depth
-.venv/bin/u2cli dump-hierarchy --compressed       # use compressed hierarchy
-.venv/bin/u2cli dump-hierarchy -o /tmp/tree.txt   # save to file
-```
-
-## Shell commands
-
-```bash
-# Run any adb shell command
-.venv/bin/u2cli shell "pm list packages -3"
-.venv/bin/u2cli shell "dumpsys window displays"
-.venv/bin/u2cli shell "input keyevent 4"
+```text
+app-clear
+app-info
+app-install
+app-list
+app-list-running
+app-start
+app-stop
+app-uninstall
+app-wait
+clear-text
+click
+click-coord
+current-app
+daemon
+device-info
+double-click
+dump-hierarchy
+element-info
+exists
+get-text
+long-click
+long-click-coord
+open-notification
+open-quick-settings
+open-url
+orientation
+press
+repl
+screen-off
+screen-on
+screenshot
+send-keys
+set-text
+shell
+swipe
+swipe-element
+swipe-ext
+ui-info
+wait
+window-size
+xpath-click
+xpath-exists
+xpath-get-text
+xpath-set-text
 ```
