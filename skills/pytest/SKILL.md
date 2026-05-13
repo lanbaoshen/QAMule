@@ -1,59 +1,82 @@
 ---
 name: pytest
-description: "Generate pytest test scripts from successful device operations. Use when the QA agent completes a purposeful test scenario (not exploration) and the user wants a reusable, repeatable test or execute tests. Trigger keywords: generate test, record test, save as test, create test script, execute tests, pytest."
+description: "Define pytest script standards for Android uiautomator2 tests, including file/function structure, run commands, device fixture selection, and pause-on-failure usage. Use when creating or executing pytest tests without business-specific content. Trigger keywords: pytest standard, test template, run pytest, --device, pause-on-failure."
 ---
 
-# Pytest Recorder
+# Pytest Standard
 
-Generate reusable pytest test files from successful QA operations on Android devices.
+Define pytest conventions for Android automation.
 
-## Procedure
+## Script Template
 
-### 1. Collect u2 Python Code During Execution
+- File naming: `tests/test_<module>.py`
+- Function naming: `test_<behavior>`
+- Use `uiautomator2 as u2` and typed device fixtures
+- Add assertions for each major step
+- Use `wait()` / `wait_gone()`; avoid `sleep()`
 
-Every `u2cli` command prints equivalent Python code in its output. As you execute each step:
-- Note the Python code snippet from the output
-- Note what assertion confirms success (element appeared, text changed, etc.)
-
-### 2. Determine Test Identity
-
-From the task, derive:
-- **Test name**: `test_{action}_{target}`
-- **File name**: `tests/test_{feature}.py` — group by feature, not by individual flow
-- **Scenario description**: One-line docstring
-
-If the target file already exists, append the new test function to it instead of creating a new file.
-
-### 3. Assemble the Test File
-
-Write the test to `tests/` using this structure:
+### Template
 
 ```python
-"""Test scenario: {one-line description}."""
+"""Test scenario: <short description>."""
 import uiautomator2 as u2
 
 
-def test_{name}(d: u2.Device):
-    """{Scenario description}."""
-    # Step 1: {what this does}
-    {u2 python code}
-    assert {assertion}
+def test_<behavior>(d: u2.Device):
+    """<what this test verifies>."""
+    # Step 1
+    # <u2 operation>
+    assert <condition>
 
-    # Step 2: {what this does}
-    {u2 python code}
-    assert {assertion}
-
-    # ...
+    # Step 2
+    # <u2 operation>
+    assert <condition>
 ```
 
-The `d` fixture is provided by `pytest_plugins/device.py` (session-scoped, auto-registered).
-Do NOT redefine it in test files. For multi-device tests, use `--device name:serial` and
-reference the named fixture (e.g., `def test_foo(phone: u2.Device)`).
+## Device Mode
 
-## Rules
+- Default mode (single device): use fixture `d`, no `--device` argument
+- Named device mode: pass `--device NAME:SERIAL` and use matching fixture name in test function
+- Multi-device mode: repeat `--device NAME:SERIAL` and reference each name as a fixture
 
-1. **Only record successful paths** — every line must have been executed and verified on device
-2. **Exact selectors** — use what actually worked, do not guess
-3. **No sleep** — use `wait()` / `wait_gone()`
-4. **Realistic timeouts** — use what actually worked
-5. After generating, tell the user how to run — see [execution](./references/execution.md) for `--device` and `--pause-on-failure` usage
+## Run Commands
+
+Basic:
+
+```bash
+uv run pytest tests/test_xxx.py -v
+```
+
+With failure pause:
+
+```bash
+uv run pytest tests/test_xxx.py -v --pause-on-failure
+```
+
+Named device:
+
+```bash
+uv run pytest --device phone:emulator-5554 --pause-on-failure
+```
+
+Multiple devices:
+
+```bash
+uv run pytest --device phone:emulator-5554 --device tablet:192.168.1.100 --pause-on-failure
+```
+
+## Pause on Failure
+
+With `--pause-on-failure` enabled:
+- Test execution pauses before teardown on failure
+- Device state is preserved for inspection
+- Resume by pressing Enter (or wait for timeout auto-resume)
+
+## Completion Checks
+
+Before finishing, verify:
+- Script contains no business-domain assumptions unless user provided them
+- Every major step has an assertion
+- No `sleep` calls are introduced
+- Fixture names and CLI `--device` arguments match
+- Returned command is directly executable
