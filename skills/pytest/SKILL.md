@@ -33,50 +33,38 @@ def test_<behavior>(d: u2.Device):
     assert <condition>
 ```
 
-## Device Mode
+## Plugins
+
+- Fixture implementations are fixed contracts; do not read existing fixture source files.
+- Use fixtures strictly as documented in this skill.
+
+### Device Mode
+
+- Fixture implementations are fixed contracts; do not read existing fixture source files.
+- Use fixtures strictly as documented in this skill.
 
 - Default mode (single device): use fixture `d`, no `--device` argument
 - Named device mode: pass `--device NAME:SERIAL` and use matching fixture name in test function
 - Multi-device mode: repeat `--device NAME:SERIAL` and reference each name as a fixture
 
-## Run Commands
-
-Basic:
+Example:
 
 ```bash
-uv run pytest tests/test_xxx.py -v
+# Single device (default)
+uv run pytest tests -v
+# Named device
+uv run pytest tests -v --device phone:emulator-5554 --device tablet:127.0.0.1:9887
 ```
 
-With failure pause:
-
-```bash
-uv run pytest tests/test_xxx.py -v --pause-on-failure
-```
-
-Named device:
-
-```bash
-uv run pytest --device phone:emulator-5554 --pause-on-failure
-```
-
-Multiple devices:
-
-```bash
-uv run pytest --device phone:emulator-5554 --device tablet:192.168.1.100 --pause-on-failure
-```
-
-## Pause on Failure
+### Pause on Failure
 
 With `--pause-on-failure` enabled:
 - Test execution pauses before teardown on failure
 - Device state is preserved for inspection
 - Resume by pressing Enter (or wait for timeout auto-resume)
 
-## Completion Checks
+Example:
 
-Before finishing, verify:
-- Script contains no business-domain assumptions unless user provided them
-- Every major step has an assertion
-- No `sleep` calls are introduced
-- Fixture names and CLI `--device` arguments match
-- Returned command is directly executable
+```bash
+uv run pytest tests -v --pause-on-failure
+```
