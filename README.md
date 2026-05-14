@@ -63,9 +63,11 @@ copilot plugin install QAMule@lanbaoshen
 /qamule:init
 ```
 
-This copies config files, creates directories (`kb/`, `tests/`, `dataset/`), and installs dependencies.
+This copies config files, bootstraps the `kb/`, `tests/`, and `dataset/` skeleton, and installs dependencies.
 
 ### Usage
+
+`uiautomator2` and `pytest` are internal execution skills. They are hidden from direct user invocation and are called by the QA and Distiller workflows automatically.
 
 **Test something:**
 ```
@@ -115,7 +117,7 @@ Scripts are a **byproduct of successful testing**, not a prerequisite.
 
 ### Distiller Agent — Train the Next Generation
 
-The Distiller operates devices using **only pixel coordinates** (no selectors) and records every interaction as VLM training trajectories. It preserves authentic behavior including misclicks and recovery — real training signal for visual reasoning models.
+The Distiller uses screenshots as its only observation channel and executes **selector-free** device commands, recording raw pixel-coordinate interactions into VLM training trajectories. It preserves authentic behavior including misclicks and recovery — real training signal for visual reasoning models.
 
 ### Knowledge Base — Memory That Grows
 
@@ -132,9 +134,9 @@ Every screen, element, flow, and quirk the agent discovers is persisted in `kb/`
 
 | Skill | Responsibility |
 |-------|---------------|
-| **uiautomator2** | Device operations via `u2cli` — tap, swipe, type, screenshot, app management |
+| **uiautomator2** | Internal device operations via `u2cli` — tap, swipe, type, screenshot, app management |
 | **kb** | Read/write persistent app knowledge — screens, flows, selectors, quirks |
-| **pytest** | Define pytest script conventions, fixtures, run modes, and pause-on-failure usage |
+| **pytest** | Internal pytest script conventions, fixtures, run modes, and pause-on-failure usage |
 | **testcase** | Search existing tests before redundant manual testing |
 | **dataset** | Manage VLM training trajectories — naming, schema, viewer |
 | **init** | One-time project scaffolding |

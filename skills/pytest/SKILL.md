@@ -1,6 +1,7 @@
 ---
 name: pytest
 description: "Define pytest script standards for Android uiautomator2 tests, including file/function structure, run commands, device fixture selection, and pause-on-failure usage. Use when creating or executing pytest tests without business-specific content. Trigger keywords: pytest standard, test template, run pytest, --device, pause-on-failure."
+user-invocable: false
 ---
 
 # Pytest Standard

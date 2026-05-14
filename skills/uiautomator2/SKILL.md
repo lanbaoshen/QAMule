@@ -4,6 +4,7 @@ description: >
   Android device automation via u2cli (uiautomator2-cli). Use this skill whenever the user wants to
   click/tap elements, swipe screens, start or stop apps, press hardware keys, type text,
   take screenshots, inspect UI hierarchy, or perform any actions on an Android device.
+user-invocable: false
 ---
 
 # uiautomator2 Device Operations
