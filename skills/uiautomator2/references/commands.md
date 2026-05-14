@@ -1,11 +1,11 @@
 # u2cli Commands Reference
 
-This reference captures the full command surface of `.venv/bin/u2cli` for this repository.
+This reference captures the full command surface of `uv run u2cli` for this repository.
 
 ## Global Usage
 
 ```bash
-.venv/bin/u2cli [OPTIONS] COMMAND [ARGS]...
+uv run u2cli [OPTIONS] COMMAND [ARGS]...
 ```
 
 Global options:

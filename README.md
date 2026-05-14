@@ -37,6 +37,8 @@ QAMule is an **agent-first** QA framework for Android. Unlike traditional automa
 ### Prerequisites
 
 - Android device connected via USB (or emulator)
+- UV (Manage Python environments and packages)
+- ADB (Android Debug Bridge)
 
 ### Installation
 
@@ -132,7 +134,7 @@ Every screen, element, flow, and quirk the agent discovers is persisted in `kb/`
 |-------|---------------|
 | **uiautomator2** | Device operations via `u2cli` — tap, swipe, type, screenshot, app management |
 | **kb** | Read/write persistent app knowledge — screens, flows, selectors, quirks |
-| **pytest** | Assemble passing test scripts from successful operations |
+| **pytest** | Define pytest script conventions, fixtures, run modes, and pause-on-failure usage |
 | **testcase** | Search existing tests before redundant manual testing |
 | **dataset** | Manage VLM training trajectories — naming, schema, viewer |
 | **init** | One-time project scaffolding |
