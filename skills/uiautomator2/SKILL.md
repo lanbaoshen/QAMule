@@ -45,15 +45,16 @@ uv run u2cli click --class-name "android.widget.Button" --text-contains "Submit"
 ```
 
 - `long-click`: Long click on a specific UI element, with the same selector options as `click`.
-- `double-click`: Double click on a specific UI element, with the same selector options as `click`.
-- `click-coords`: Click on specific screen coordinates. Example:
+- `click-coord`: Click on specific screen coordinates. Example:
 
 ```bash
 # Click by absolute coordinates
-uv run u2cli click-coords 100 200
+uv run u2cli click-coord 100 200
 # Click by relative coordinates (percentage of screen size)
-uv run u2cli click-coords 0.5 0.5
+uv run u2cli click-coord 0.5 0.5
 ```
+
+- `long-click-coord`: Long click on specific screen coordinates, with the same options as `click-coord`.
 
 - `xpath-click`: Click on a UI element specified by an XPath expression. Example: `uv run u2cli xpath-click "//android.widget.TextView[@text='Submit']"`.
 - `swipe`: Swipe from one point to another. Example:
@@ -105,9 +106,9 @@ Most commands that target UI elements accept these options (combinable):
 - `send-keys`: Clear and send text to an input box. Example: `uv run u2cli send-keys "Hello World"`.
 - `clear-text`: Clear text from an input box.
 
-### Press Keys
+### Press
 
-- `press-key`: Simulate pressing a hardware key, such as "home", "back", "volume-up", etc. Example: `uv run u2cli press-key home`.
+- `press`: Simulate pressing a hardware key, such as "home", "back", "volume-up", etc. Example: `uv run u2cli press home`.
 
 ### Apps
 
