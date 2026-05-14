@@ -558,13 +558,13 @@ body {
 /* Overlay markers */
 .click-marker {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--accent);
-  border: 1px solid #fff;
+  border: 2px solid #fff;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 1px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.5);
+  box-shadow: 0 0 0 2px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.5);
   pointer-events: none;
   z-index: 2;
 }
@@ -572,7 +572,7 @@ body {
 .click-marker::after {
   content: '';
   position: absolute;
-  inset: -2px;
+  inset: -4px;
   border-radius: 50%;
   border: 1px solid rgba(255, 77, 79, 0.4);
   animation: ping 1.5s ease-out infinite;
@@ -736,7 +736,7 @@ function renderList(data) {
 }
 
 function extractTimestamp(path) {
-  // Path like "normal/cold_start_pin_unlock_20260430_113000/trajectory.json"
+  // Path like "open_wifi_20260430_113000/trajectory.json" or "normal/.../trajectory.json"
   const match = path.match(/(\d{8}_\d{6})/);
   return match ? match[1] : '0';
 }
@@ -1056,32 +1056,42 @@ class ViewerHandler(SimpleHTTPRequestHandler):
 
     def _serve_index(self):
         """Scan dataset directory and return grouped trajectory list."""
-        result = []
+        grouped = {}
         dataset = self.dataset_dir
 
-        for scenario_type in sorted(dataset.iterdir()):
-            if not scenario_type.is_dir():
+        for traj_file in sorted(dataset.rglob("trajectory.json")):
+            if not traj_file.is_file():
                 continue
-            group = {"group": scenario_type.name, "items": []}
-            for session in sorted(scenario_type.iterdir()):
-                traj_file = session / "trajectory.json"
-                if not traj_file.exists():
-                    continue
-                try:
-                    data = json.loads(traj_file.read_text(encoding="utf-8"))
-                    group["items"].append(
-                        {
-                            "path": f"{scenario_type.name}/{session.name}/trajectory.json",
-                            "task_id": data.get("task_id", ""),
-                            "instruction": data.get("instruction", "—"),
-                            "app": data.get("app", ""),
-                            "steps": data.get("total_steps", len(data.get("steps", []))),
-                        }
-                    )
-                except (json.JSONDecodeError, OSError):
-                    continue
-            if group["items"]:
-                result.append(group)
+            try:
+                rel = traj_file.relative_to(dataset)
+            except ValueError:
+                continue
+
+            # New layout: dataset/{session}/trajectory.json -> "dataset" group.
+            # Legacy layout: dataset/{group}/{session}/trajectory.json -> {group}.
+            group_name = rel.parts[0] if len(rel.parts) >= 3 else "dataset"
+            if group_name not in grouped:
+                grouped[group_name] = []
+
+            try:
+                data = json.loads(traj_file.read_text(encoding="utf-8"))
+                grouped[group_name].append(
+                    {
+                        "path": rel.as_posix(),
+                        "task_id": data.get("task_id", ""),
+                        "instruction": data.get("instruction", "—"),
+                        "app": data.get("app", ""),
+                        "steps": data.get("total_steps", len(data.get("steps", []))),
+                    }
+                )
+            except (json.JSONDecodeError, OSError):
+                continue
+
+        result = [
+            {"group": group_name, "items": grouped[group_name]}
+            for group_name in sorted(grouped)
+            if grouped[group_name]
+        ]
 
         self._send_json(result)
 
