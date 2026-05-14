@@ -463,6 +463,30 @@ body {
   padding: 0 6px;
 }
 
+.step-context {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.step-context-label {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.step-context-value {
+  color: var(--blue);
+  word-break: break-all;
+}
+
 /* Action badge */
 .action-badge {
   display: inline-flex;
@@ -816,6 +840,9 @@ function renderTrajectory(traj, basePath) {
     const cls = isTerminal ? 'terminal' : isImpossible ? 'impossible' : '';
 
     const actionType = step.action.type;
+    const currentApp = typeof step.current_app === 'string' && step.current_app.trim()
+      ? step.current_app.trim()
+      : '—';
     const params = formatActionParams(step.action);
 
     // Per-step success badge
@@ -834,6 +861,9 @@ function renderTrajectory(traj, basePath) {
 
     // Thought
     html += `<div class="thought">${esc(step.thought)}</div>`;
+
+    // Foreground app for this step
+    html += `<div class="step-context"><span class="step-context-label">current_app</span><span class="step-context-value">${esc(currentApp)}</span></div>`;
 
     // Action badge + success
     html += `<div class="action-badge">

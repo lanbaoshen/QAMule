@@ -278,6 +278,9 @@ for traj_file in trajectory_files:
         if not is_non_empty_string(step.get("thought")):
             add_error(step_loc, "field 'thought' must be a non-empty string")
 
+        if not is_non_empty_string(step.get("current_app")):
+            add_error(step_loc, "field 'current_app' must be a non-empty string")
+
         action_type = validate_action(step.get("action"), step_loc)
         if action_type in TERMINAL_ACTIONS:
             terminal_action_positions.append(index)

@@ -11,33 +11,40 @@ Use this skill to create and validate VLM trajectory sessions in `dataset/`.
 
 ```
 dataset/
-  {task_slug}_{YYYYMMDD}_{HHMMSS}/
+  {session_dir}/
     step_001.png … step_NNN.png
     trajectory.json
 ```
 
-### trajectory.json
+### Init Session Directory
 
-Template:
+Initialize once at the start of a session:
 
-```json
-{
-  "task_id": "{session_dir}",
-  "instruction": "Human task instruction here",
-  "app": "com.example.app",
-  "device": { "model": "…", "resolution": [1080, 2400], "android": "14" },
-  "steps": [
-    {
-      "step": 1,
-      "screenshot": "step_001.png",
-      "thought": "What I see and my reasoning to decide the next action.",
-      "action": { "type": "click", "x": 512, "y": 750 },
-      "success": true
-    }
-  ],
-  "success": true,
-  "total_steps": 1
-}
+```bash
+uv run python <path-to-this-skill>/scripts/trajectory.py init \
+  --task-slug open_wifi \
+  --instruction "Human task instruction here" \
+  --app com.example.app \
+  --device-model "Pixel 8" \
+  --resolution 1080 2400 \
+  --android 14
+```
+
+It will print the created session directory.
+
+### Screenshot
+
+Save screenshots as `step_{NNN}.png` (3-digit zero padding) in the session directory.
+
+### Append Steps
+
+```bash
+uv run python <path-to-this-skill>/scripts/trajectory.py append dataset/{session_dir} \
+  --screenshot step_001.png \
+  --current-app com.example.app/.MainActivity \
+  --thought "I can see the main screen and the login button is visible." \
+  --action '{"type":"click","x":512,"y":750}' \
+  --step-success true
 ```
 
 #### Action Types
@@ -54,22 +61,19 @@ Template:
 | `finish` | `reason` | Terminal, task completed |
 | `impossible` | `reason` | Terminal, task cannot be completed |
 
-#### Validation Rules
+### Validation
 
-- session dir: `mkdir -p "dataset/{task_slug}_$(date +%Y%m%d_%H%M%S)"`
-- Save screenshots as `step_{NNN}.png` (3-digit zero padding).
-- `trajectory.json` following the template above.
-- Validate with scripts:
+Validate with scripts:
 
 ```bash
 # Validate a single session directory
-bash skills/dataset/scripts/validate.sh dataset/{session_dir}/
+bash <path-to-this-skill>/scripts/validate.sh dataset/{session_dir}/
 # Validate full dataset
-bash skills/dataset/scripts/validate.sh dataset/
+bash <path-to-this-skill>/scripts/validate.sh dataset/
 ```
 
 ### Preview Dataset with Viewer for Human Evaluation
 
 ```bash
-uv run python skills/dataset/scripts/viewer.py dataset/
+uv run python <path-to-this-skill>/scripts/viewer.py dataset/
 ```
