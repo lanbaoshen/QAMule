@@ -1,43 +1,57 @@
 ---
 name: testcase
-description: "Search and list existing pytest test cases in the workspace. Use when the user requests testing a feature, to check if automated tests already exist before manual testing. Also use for test coverage analysis, listing all tests, or finding which test points are covered. Trigger keywords: test coverage, existing tests, find test, list tests, what tests exist, 测试覆盖, 已有用例."
+description: "Inspect existing pytest coverage in tests/. Use when checking whether a feature already has automated tests, listing related cases, or deciding whether to add a new test. Trigger keywords: existing test, test inventory, test coverage, find test, list tests, 有没有现有用例, 已有测试, 覆盖范围."
 ---
 
-# Test Inventory
+# Testcase Inventory
 
-Search `tests/` for existing automated test cases.
+Use this skill before writing a new test or doing manual validation if you need to know what is already covered in `tests/`.
 
-## Procedure
+## Search Workflow
 
-### 1. Extract Keywords
+### 1. Extract Search Terms
 
-From the user's test request, extract:
-- **Chinese keywords** — e.g. "下载", "安装", "播放"
-- **English keywords** — e.g. "download", "install", "play"
-- **Feature names** — e.g. "app_download", "store"
+Collect a small set of likely terms from the request:
 
-### 2. Search File Names and Docstrings
+- Chinese feature words
+- English feature words
+- package, page, or flow names
+- domain aliases already used in the repo
 
-Search `tests/` directory for the extracted keywords against file names and module docstrings (first line `"""..."""`).
+Example:
 
-Use alternation to search **all** extracted keywords (both Chinese and English) at once:
+```text
+下载|download|app_download
 ```
-grep -r -l "下载|download|app_download" tests/
+
+### 2. Search tests/
+
+Search `tests/` by both file path and content. Prefer one regex with alternation instead of multiple passes.
+
+```bash
+rg -n -i "下载|download|app_download" tests
 ```
 
-### 3. Search Comments and Function Docstrings
+### 3. Summarize Matches
 
-If Step 2 finds no matches, broaden the search to function docstrings and code comments (`# Step N: ...`).
+For each relevant hit, report:
 
-### 4. Handle No Match
+- file path
+- test function name
+- what behavior it appears to cover
+- whether the match is direct coverage or only adjacent coverage
 
-If no matching tests are found, inform the user that no existing tests cover the requested feature and proceed with manual testing.
+### 4. Decide Next Action
+
+- If strong matches exist, reuse or extend those tests.
+- If only partial matches exist, call out the gap explicitly.
+- If no match exists, state that no automated test was found and proceed with manual validation or new test creation.
 
 ## Coverage Analysis
 
-When the user asks about test coverage or what's covered:
+When the user asks what is covered or what is missing:
 
-1. List all test files and functions in `tests/`
-2. Extract docstrings to describe what each test covers
-3. Cross-reference with `kb/app/flows/` to identify gaps
-4. Report covered vs uncovered flows
+1. List all test files and functions in `tests/`.
+2. Extract short intent from names, docstrings, and comments.
+3. Group matches by feature or flow.
+4. Highlight obvious gaps relevant to the request.
