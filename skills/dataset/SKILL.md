@@ -21,7 +21,7 @@ dataset/
 Initialize once at the start of a session:
 
 ```bash
-uv run python <path-to-this-skill>/scripts/trajectory.py init \
+uv run <path-to-this-skill>/scripts/trajectory.py init \
   --task-slug open_wifi \
   --instruction "Human task instruction here" \
   --app com.example.app \
@@ -39,7 +39,7 @@ Save screenshots as `step_{NNN}.png` (3-digit zero padding) in the session direc
 ### Append Steps
 
 ```bash
-uv run python <path-to-this-skill>/scripts/trajectory.py append dataset/{session_dir} \
+uv run <path-to-this-skill>/scripts/trajectory.py append dataset/{session_dir} \
   --screenshot step_001.png \
   --current-app com.example.app/.MainActivity \
   --thought "I can see the main screen and the login button is visible." \
@@ -75,5 +75,5 @@ bash <path-to-this-skill>/scripts/validate.sh dataset/
 ### Preview Dataset with Viewer for Human Evaluation
 
 ```bash
-uv run python <path-to-this-skill>/scripts/viewer.py dataset/
+uv run <path-to-this-skill>/scripts/viewer.py dataset/
 ```
