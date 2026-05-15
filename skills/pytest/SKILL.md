@@ -69,3 +69,5 @@ Example:
 ```bash
 uv run pytest tests -v --pause-on-failure
 ```
+
+**Warning**: If `--pause-on-failure` is used, you must use `async` mode to run this process in the current agent session. Do not use `subagent` and `sync` mode for this, as the pause will not work correctly. Always check the process output to confirm the pause is active when using this option.
