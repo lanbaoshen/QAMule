@@ -112,6 +112,11 @@ This copies config files, creates the project skeleton, and installs the base de
 /qamule:testcase Which features are covered right now?
 ```
 
+**Preview Dataset**
+```text
+/qamule:dataset Preview dataset
+```
+
 ## How It Works
 
 ### QA Agent — test by doing, then distill

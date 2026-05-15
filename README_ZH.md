@@ -112,6 +112,11 @@ copilot plugin install QAMule@lanbaoshen
 /qamule:testcase 现在覆盖了哪些功能点
 ```
 
+**预览数据集：**
+```text
+/qamule:dataset 预览数据集
+```
+
 ## 工作原理
 
 ### QA Agent —— 以测代写
