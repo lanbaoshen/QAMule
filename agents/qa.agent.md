@@ -38,7 +38,7 @@ If user wants you to check if a feature or screen is working, or if a bug is fix
 4. Use `kb skill` to update the knowledge base with any new findings or observations.
 5. Report the test results to the user in a clear and concise manner.
 
-**Warning**: If there are some issues during pytest execution in `--pause-on-failure` mode, the test process will be paused, and you can analyze the problem directly on-site.
+**Warning**: If there are some issues during pytest execution in `--pause-on-failure` mode, the test process will pause before teardown. Inspect the live failure state first, then resume by sending the configured signal shown in pytest output.
 
 ## Note
 

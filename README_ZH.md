@@ -117,6 +117,19 @@ copilot plugin install QAMule@lanbaoshen
 /qamule:dataset 预览数据集
 ```
 
+### 失败暂停
+
+QAMule 的 pytest 工作流分成两种模式：
+
+- 普通运行使用同步方式完成，Agent 在 pytest 日志中查看最终结果。
+- 使用 `--pause-on-failure` 的运行使用异步方式进行，Agent 持续监控 pytest 日志，判断当前是“失败暂停”还是“正常结束”。
+
+当启用 pause-on-failure 时，pytest 会在 teardown 前暂停，方便 Agent 先检查失败现场，再根据 pytest 输出里显示的恢复信号继续执行。
+
+默认恢复信号是 `SIGUSR1`。如果需要，可以通过 `--pause-resume-signal <SIGNAL>` 改成别的信号。
+
+<img src="./pytest-run-modes-bilingual.excalidraw.svg" alt="Pytest run modes workflow">
+
 ## 工作原理
 
 ### QA Agent —— 以测代写

@@ -117,6 +117,19 @@ This copies config files, creates the project skeleton, and installs the base de
 /qamule:dataset Preview dataset
 ```
 
+### Pause on failure
+
+QAMule's pytest workflow is based on two modes:
+
+- Normal runs complete synchronously, and the agent reviews the final result from the pytest log.
+- Runs with `--pause-on-failure` execute asynchronously, and the agent monitors the pytest log to detect whether the session paused on a failure or finished normally.
+
+When pause-on-failure is enabled, pytest stops before teardown so the agent can inspect the live failure state first, then resume the session by sending the configured signal shown in the pytest output.
+
+The default resume signal is `SIGUSR1`. Use `--pause-resume-signal <SIGNAL>` if you need a different one.
+
+<img src="./pytest-run-modes-bilingual.excalidraw.svg" alt="Pytest run modes workflow">
+
 ## How It Works
 
 ### QA Agent — test by doing, then distill

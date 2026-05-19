@@ -62,7 +62,7 @@ uv run pytest tests -v --device phone:emulator-5554 --device tablet:127.0.0.1:98
 With `--pause-on-failure` enabled:
 - Test execution pauses before teardown on failure
 - Device state is preserved for inspection
-- Resume by pressing Enter (or wait for timeout auto-resume)
+- Resume by sending a signal to the pytest process, the command will be printed in the pytest output when paused
 
 Example:
 
@@ -70,4 +70,30 @@ Example:
 uv run pytest tests -v --pause-on-failure
 ```
 
-**Warning**: If `--pause-on-failure` is used, you must use `async` mode to run this process in the current agent session. Do not use `subagent` and `sync` mode for this, as the pause will not work correctly. Always check the process output to confirm the pause is active when using this option.
+```bash
+# To resume after failure pause, run in a new process or terminal:
+kill -SIGUSR1 <pytest-pid>
+```
+
+## Rules
+- Every pytest run command should be executed via `uv` and redirect output to this log file for later review:
+
+```bash
+log="/tmp/qamule-$(date +%Y%m%d-%H%M%S)-$$.log"
+touch "$log" && printf "Pytest log initialized: $log\n"
+
+uv run pytest [command/options] >"$log" 2>&1
+ec=$?
+printf '\nQAMule pytest exit code=%s' "$ec" >>"$log"
+```
+
+- If `--pause-on-failure` is not used, you must use `sync` mode to run this process and review the log file after completion
+
+- If `--pause-on-failure` is used, you must use `async` mode to run this process and use the following command to monitor the log file for the pause or exit message (If user not specify weather to use `--pause-on-failure` or not, default to not using it):
+
+```bash
+bash <path-to-this-skill>/scripts/monitor.sh "$log"
+```
+
+- Don't write complex command, just use the command defined in skill
+- Don't use `subagent` to run this process, always **run in the current agent**.

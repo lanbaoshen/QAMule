@@ -1,7 +1,7 @@
 {
   "name": "QAMule",
   "description": "QAMule - Android UI testing and VLM training data collection plugin. Provides QA testing agents, trajectory distillation, and automation skills for Android devices.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Lanbao Shen",
     "email": "lanbaoshen@icloud.com",
