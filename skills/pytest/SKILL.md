@@ -59,6 +59,8 @@ uv run pytest tests -v --device phone:emulator-5554 --device tablet:127.0.0.1:98
 
 ### Pause on Failure
 
+If user not specify weather to use `--pause-on-failure` or not, default to not using it
+
 With `--pause-on-failure` enabled:
 - Test execution pauses before teardown on failure
 - Device state is preserved for inspection
@@ -76,6 +78,7 @@ kill -SIGUSR1 <pytest-pid>
 ```
 
 ## Rules
+
 - Every pytest run command should be executed via `uv` and redirect output to this log file for later review:
 
 ```bash
@@ -89,7 +92,7 @@ printf '\nQAMule pytest exit code=%s' "$ec" >>"$log"
 
 - If `--pause-on-failure` is not used, you must use `sync` mode to run this process and review the log file after completion
 
-- If `--pause-on-failure` is used, you must use `async` mode to run this process and use the following command to monitor the log file for the pause or exit message (If user not specify weather to use `--pause-on-failure` or not, default to not using it):
+- If `--pause-on-failure` is used, you must use `async` mode to run this process and run the following command **in `sync` mode** to monitor the log file for the pause or exit message **in a different terminal**:
 
 ```bash
 bash <path-to-this-skill>/scripts/monitor.sh "$log"
