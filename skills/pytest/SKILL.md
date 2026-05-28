@@ -92,7 +92,7 @@ printf '\nQAMule pytest exit code=%s' "$ec" >>"$log"
 
 - If `--pause-on-failure` is not used, you must use `sync` mode to run this process and review the log file after completion
 
-- If `--pause-on-failure` is used, you must use `async` mode to run this process and run the following command **in `sync` mode** to monitor the log file for the pause or exit message **in a different terminal**:
+- If `--pause-on-failure` is used, you must use `async` mode to run this process and run the following command **in `sync` mode** without `timeout` param to monitor the log file for the pause or exit message **in a different terminal**:
 
 ```bash
 bash <path-to-this-skill>/scripts/monitor.sh "$log"
