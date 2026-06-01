@@ -14,10 +14,8 @@ Initialize the standard QAMule test project structure in the user's workspace.
 Copy the [assets](./assets/) directory into the project root, skipping any files that already exist:
 
 ```bash
-cp -rn <path-to-this-skill>/assets/* <project-root>/
+cp -rn <path-to-this-skill>/assets/. <project-root>/
 ```
-
-The `-n` flag ensures existing files are never overwritten.
 
 ### 2. Init kb, test directories
 
