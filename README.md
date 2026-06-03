@@ -1,16 +1,22 @@
 <p align="center">
-	<img src="./logo.svg" width="120" alt="QAMule Logo">
+	<img src="./logo.jpg" width="120" alt="QAMule Logo">
 </p>
 
 <h1 align="center">QAMule</h1>
 
 <p align="center">
-	An agent-native Android testing framework — the agent itself is the tester.
+	Agent-native Android QA solution where the agent is the primary executor.
+</p>
+
+<p align="center">
+	Explore live apps, preserve failure state, distill stable flows into pytest, and accumulate reusable product knowledge.
 </p>
 
 <p align="center">
 	<a href="README_ZH.md">中文</a> •
+	<a href="#your-first-ai-qa">Your First AI QA</a> •
 	<a href="#quick-start">Quick Start</a> •
+	<a href="#extensibility">Extensibility</a> •
 	<a href="#how-it-works">How It Works</a> •
 	<a href="https://github.com/lanbaoshen/QAMule-Practice">Practice Reference</a> •
 	<a href="LICENSE">MIT License</a>
@@ -18,11 +24,11 @@
 
 ---
 
-## What Is This?
+## Meet QAMule
 
-QAMule is an **agent-first** Android QA framework. It does not use AI to help you generate scripts first. Instead, it lets an **AI agent operate the device directly to complete testing**. Scripts still matter, but they are no longer the prerequisite for testing. They become an acceleration cache built after a behavior has already been validated.
+QAMule is an **agent-first** Android QA framework built for teams that want AI to **execute tests on real devices**, not just generate scripts.
 
-The key shift is not "using AI to assist automation." The key shift is moving the test entry point from scripts to agents, then turning long-term reuse into KB entries, pytest assets, and datasets.
+Instead of starting from automation code, QAMule starts from live exploration and validation. Stable behavior can then be distilled into pytest assets, while the knowledge gained along the way is kept in the KB for future runs.
 
 **Paradigm shift:**
 
@@ -35,19 +41,33 @@ The key shift is not "using AI to assist automation." The key shift is moving th
 | **New scenarios** | Write scripts first, then validate | Explore and test directly |
 | **Knowledge retention** | Scattered across scripts and human memory | Continuously written into the KB for reuse |
 
-## Core Highlights
+## Why QAMule
 
-1. **The agent tests directly.** When QAMule sees a new page, flow, or feature, its first response is not to patch scripts. It lets the agent inspect, try, and validate first. That makes it a natural fit for Android teams with fast-changing requirements, lagging regression coverage, and high exploration cost.
+1. **It shortens the path from idea to test.** New pages, unstable flows, and changing UI do not need to wait for script coverage first. The agent can inspect, act, and validate directly on the live device.
 
-2. **QA and Distiller have distinct roles.** The QA agent handles exploration, validation, regression, issue reproduction, and eventually pytest script distillation for mature scenarios. The Distiller agent captures real visual interaction trajectories and turns them into VLM training data. Their outputs differ, but they share the same KB.
+2. **It separates testing from data collection cleanly.** QA focuses on validation, regression, and issue reproduction. Distiller focuses on real interaction trajectories for VLM training. Both build on the same KB without mixing responsibilities.
 
-3. **The KB makes experience reusable.** Pages, elements, flows, dependency apps, and abnormal behaviors are continuously written into `kb/`. One exploration run does not only solve the current task. It also leaves context behind for future QA and Distiller runs.
+3. **It turns each run into reusable context.** Pages, selectors, flows, dependency apps, and quirks are written back into `kb/`, so later runs start from accumulated experience instead of from scratch.
 
-4. **Scripts are a cache of successful experience.** Pytest is not the entry point to testing. It is the artifact of stable, validated scenarios. The agent handles change; scripts provide cheap regression.
+4. **It keeps scripts valuable without making them the bottleneck.** Stable scenarios can be distilled into pytest for low-cost regression, while the agent stays responsible for handling change.
 
-5. **Failure state is preserved.** QAMule freezes the failing scene with pause-on-failure, so the agent can keep observing, analyzing, and sometimes recovering before teardown runs, instead of relying only on postmortem logs.
+5. **It preserves the moment that matters most.** Pause-on-failure keeps the failed scene alive so the agent can inspect it before teardown and sometimes recover in place.
+
+6. **It lets the agent step in only where judgment is needed.** Tests can hand one bounded checkpoint to the agent and continue with a simple yes-or-no result.
+
+## Your First AI QA
+
+QAMule behaves a lot like a new QA teammate, except this one lives directly in the device and the pipeline.
+
+- It explores the app on its own and learns pages, paths, and abnormal states.
+- It writes what it learns into the KB, gradually building reusable testing knowledge.
+- It completes validation itself, and turns stable repetitive work into pytest scripts when automation is worth it.
+- In pause mode, it feels like a QA engineer watching the pipeline live and inspecting failures on the spot.
+- On the Distiller side, it also acts like a tireless data-labeling intern, continuously collecting real-device trajectories.
 
 ## Quick Start
+
+In a few commands, you can explore a page, test a feature, collect a real-device trajectory, and keep the resulting knowledge for reuse.
 
 ### Prerequisites
 
@@ -84,57 +104,80 @@ This copies config files, creates the project skeleton, and installs the base de
 
 **Explore a page:**
 ```text
-@QAMule QA explore the Settings page
+@QAMule QA explore the Settings app home page, identify the main sections, and summarize actionable elements
 ```
 
 **Test a feature:**
 ```text
-@QAMule QA test whether the Bluetooth toggle in Settings works correctly
+@QAMule QA validate that the Bluetooth toggle in Settings can be enabled and disabled correctly, and report any unexpected system behavior
 ```
 
 **Collect one training trajectory:**
 ```text
-@QAMule Distiller open Bluetooth in com.android.settings
+@QAMule Distiller collect one real-device trajectory for opening the Bluetooth settings page in com.android.settings
 ```
 
 **Update the knowledge base:**
 ```text
-/qamule:kb This app can only be launched through the UI
+/qamule:kb Record that this app cannot be launched reliably through adb and must be entered through the in-app UI flow
 ```
 
 **Query the knowledge base:**
 ```text
-/qamule:kb How do I check the system version?
+/qamule:kb What is the known navigation path for checking the Android system version on this device?
 ```
 
 **Review existing coverage:**
 ```text
-/qamule:testcase Which features are covered right now?
+/qamule:testcase Show the currently covered features for Settings and identify obvious coverage gaps
 ```
 
-**Preview Dataset**
+**Preview Dataset:**
 ```text
-/qamule:dataset Preview dataset
+/qamule:dataset Preview the latest collected trajectories and summarize the available data quality
 ```
 
 ### Pause on failure
 
-QAMule's pytest workflow is based on two modes:
+When enabled, pytest pauses before teardown after a failure so the agent can inspect the live scene and optionally try recovery.
 
-- Normal runs complete synchronously, and the agent reviews the final result from the pytest log.
-- Runs with `--pause-on-failure` execute asynchronously, and the agent monitors the pytest log to detect whether the session paused on a failure or finished normally.
+This is for cases where logs and screenshots are not enough and the exact failed state still matters.
 
-When pause-on-failure is enabled, pytest stops before teardown so the agent can inspect the live failure state first, then resume the session by sending the configured signal shown in the pytest output.
+The default resume signal is `SIGUSR1`, and you can override it with `--pause-resume-signal <SIGNAL>`.
 
-The default resume signal is `SIGUSR1`. Use `--pause-resume-signal <SIGNAL>` if you need a different one.
+For shell-driven agent runs, QAMule provides `skills/pytest/scripts/monitor.sh` to watch the log and `skills/pytest/scripts/resume.sh` to resume the paused run.
 
-<img src="./pytest-run-modes-bilingual.excalidraw.svg" alt="Pytest run modes workflow">
+### Agent checkpoints
+
+QAMule also supports explicit agent checkpoints during a healthy test run. The test can pause at one decision point, ask the agent for a bounded judgment, and then continue.
+
+Use `agent_checkpoint` when a local assertion alone is not reliable enough, such as judging a transient screen, a visual summary, or an exploratory branch outcome.
+
+The contract stays simple: the agent returns a boolean result plus an optional reason, and the test decides how to proceed.
+
+Agent-driven pytest runs still use one workflow: write to a log, let `monitor.sh` detect completion or pause events, and use `resume.sh` when continuation is needed.
+
+<img src="./pytest-run-modes-bilingual.excalidraw.svg" alt="QAMule pytest run modes">
+
+## Extensibility
+
+The project scaffold created by `/qamule:init` is meant to be a starting point, not a closed system. Teams can extend it with additional skills that match their own delivery workflow.
+
+For example, if your agent environment provides a Jira-oriented skill, you can wire it into the initialized project and use Jira as the test case platform for QAMule. In that setup, Jira can become the source for case planning, execution scope, and result tracking, while QAMule remains responsible for live device execution, KB accumulation, and pytest distillation.
+
+This makes QAMule flexible enough to fit teams that already rely on external systems for test management instead of forcing all case management to live inside the framework itself.
+
+QAMule can also serve as the validation stage inside an AI Coding workflow. After an agent or coding assistant finishes a product change, QAMule can take over the verification step and test the changed functionality directly on an emulator or a real device. This makes it possible to connect code generation and device-level validation into one delivery loop instead of stopping at code output alone.
+
+This also makes QAMule easier to embed into an AI-driven delivery workflow, where it serves as the device-level validation stage after code changes rather than existing only as a standalone testing framework.
 
 ## How It Works
 
-### QA Agent — test by doing, then distill
+QAMule is not built around one overloaded agent. It uses distinct roles for testing, data capture, and knowledge accumulation so each run can produce both immediate results and reusable assets.
 
-The QA agent follows a human-like testing loop:
+### QA Agent
+
+QA is the execution layer for product validation. It works in a simple loop:
 
 ```text
 Observe -> Plan -> Execute -> Verify -> Learn -> Record
@@ -149,26 +192,26 @@ Observe -> Plan -> Execute -> Verify -> Learn -> Record
 5. **Learn**: write new findings into the KB
 6. **Record**: generate pytest scripts for suitable scenarios to support later regression
 
-Scripts are the **distilled result** of a successful test, not a prerequisite before the test starts.
+The point is straightforward: the test starts from the live product, and scripts appear later only when the behavior is stable enough to be worth reusing.
 
-<img src="./qa-agent-workflow-bilingual.excalidraw.svg">
+<img src="./qa-agent-workflow-bilingual.excalidraw.svg" alt="QAMule QA agent workflow">
 
-### Distiller Agent — collect real trajectories for vision models
+### Distiller Agent
 
-Distiller does one thing only: **capture high-quality, replayable trajectories from real device interaction**.
+Distiller is the data layer. It is focused on **capturing replayable real-device trajectories for vision models**.
 
-It uses screenshots and the current app state as its main observation input, executes actions with absolute coordinates, and logs screenshots, actions, reasoning, foreground app, and results step by step into `dataset/`. It does not generate pytest scripts. Its focus is preserving real interaction behavior, including missteps, corrections, waiting, and recovery. It also reuses page and flow knowledge from the KB to reduce blind trial and error.
+It records screenshots, actions, reasoning, foreground app, and results into `dataset/`. It does not generate pytest scripts. Its job is to preserve real interaction behavior, including missteps, corrections, waiting, and recovery, so teams can build training data from what actually happened on the device.
 
-<img src="./distiller-agent-workflow-bilingual.excalidraw.svg">
+<img src="./distiller-agent-workflow-bilingual.excalidraw.svg" alt="QAMule distiller workflow">
 
-### Knowledge Base — shared memory for both agents
+### Knowledge Base
 
-`kb/` is QAMule's long-term memory layer. It stores page information, element selectors, business flows, dependency apps, and known quirks.
+`kb/` is the shared memory layer for both agents. It stores page information, selectors, flows, dependency apps, and known quirks.
 
 - **QA Agent** uses it to reduce repeated exploration and improve testing efficiency.
 - **Distiller Agent** uses it to understand the target app and context faster.
 
-One of QAMule's core design choices is not asking a single agent to produce everything. Different agents collaborate around the same shared knowledge and accumulate it over time, while producing different kinds of testing and data assets.
+This is what makes QAMule compound over time: one run validates the present task, and the same run leaves behind context for the next one.
 
 ### Agents
 
@@ -183,29 +226,31 @@ One of QAMule's core design choices is not asking a single agent to produce ever
 |-------|------|
 | **uiautomator2** | Internal device operation skill, using `u2cli` for tapping, swiping, input, screenshots, and app management |
 | **kb** | Read and write persistent app knowledge: pages, flows, selectors, and abnormal behavior |
-| **pytest** | Internal pytest conventions for script structure, fixture contracts, run modes, and pause-on-failure usage |
+| **pytest** | Internal pytest conventions for script structure, fixture contracts, run modes, pause-on-failure, and agent checkpoints |
 | **testcase** | Look up existing cases before manual testing to avoid duplicate effort |
 | **dataset** | Manage VLM training trajectories: naming, schema, and visual browsing |
 | **init** | One-time project scaffolding |
 
 ## Design Principles
 
-1. **The agent is the tester.** AI is not writing tests for another system. It executes the test itself.
+1. **The agent is the executor.** AI is not writing tests for another system first. It operates the product and performs the test itself.
 
-2. **Scripts are an acceleration layer, not the prerequisite.** Pytest exists to reuse validated behavior, not to limit testing to what already has scripts.
+2. **Scripts are a leverage layer, not the gate.** Pytest exists to reuse validated behavior, not to decide what is testable.
 
-3. **QA and Distiller are separated, not blended.** One produces testing assets, the other produces data assets.
+3. **Testing and data collection are separated by design.** QA produces testing assets, while Distiller produces trajectory data.
 
-4. **The knowledge base is the collaboration layer.** QA and Distiller share page understanding, flow knowledge, and exception experience through the KB, reducing repeated exploration.
+4. **The knowledge base is the collaboration layer.** QA and Distiller share page understanding, flow knowledge, and exception experience through the KB.
 
-5. **Failure state matters more than logs.** Preserve the state first, let the agent analyze in place, and try recovery when possible.
+5. **Live state matters more than postmortem artifacts.** Preserve the state first, let the agent analyze in place, and try recovery when possible.
 
-## Who This Fits
+## Who It Is For
 
-- Android teams with fast iteration and high script maintenance cost
-- Teams that want AI to participate in test execution, not just code generation
-- Teams that want to turn the testing process into long-term knowledge assets
-- Teams that care about both engineering test coverage and vision-operation model data accumulation
+QAMule is a strong fit for teams that need Android QA to move at product speed without throwing away the value of structured regression.
+
+- Android teams shipping fast-moving UI where script maintenance keeps falling behind
+- Teams that want AI to participate in execution and validation, not only in code generation
+- Teams that want exploratory runs to accumulate into reusable knowledge instead of disappearing after one session
+- Teams that care about both regression assets and real-device trajectory data for future model work
 
 ## Dependencies
 
