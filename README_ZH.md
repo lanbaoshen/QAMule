@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./logo.png" width="120" alt="QAMule Logo">
+  <img src="./logo.jpg" width="120" alt="QAMule Logo">
 </p>
 
 <h1 align="center">QAMule</h1>
