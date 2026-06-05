@@ -45,9 +45,9 @@ Example:
 
 ```bash
 # Single device (default)
-uv run pytest tests -v
+uv run pytest tests -sv
 # Named device
-uv run pytest tests -v --device phone:emulator-5554 --device tablet:127.0.0.1:9887
+uv run pytest tests -sv --device phone:emulator-5554 --device tablet:127.0.0.1:9887
 ```
 
 ## Pause and Checkpoints
@@ -62,7 +62,7 @@ With `--pause-on-failure`:
 Example:
 
 ```bash
-uv run pytest tests -v --pause-on-failure
+uv run pytest tests -sv --pause-on-failure
 ```
 
 ```bash
@@ -70,9 +70,12 @@ uv run pytest tests -v --pause-on-failure
 kill -SIGUSR1 <pytest-pid>
 ```
 
-Tests can also request an explicit reasoning checkpoint through `agent_checkpoint`:
+Tests can also request an explicit reasoning checkpoint through `agent_checkpoint`, use `agent_checkpoint` only when the test still needs one bounded semantic or visual go/no-go decision that cannot be encoded reliably with the checks above:
 
 ```python
+import pytest
+
+
 def test_checkout_summary(agent_checkpoint):
     result = agent_checkpoint(
         "Decide whether the screen already shows the final checkout summary.",
@@ -82,12 +85,7 @@ def test_checkout_summary(agent_checkpoint):
     assert result.result is True
 ```
 
-Use `agent_checkpoint` only when plain device assertions are not enough. Good cases are bounded visual or semantic decisions that still belong inside the current test, not broad exploratory work.
-
-- `failure` pause: a test step already failed and the agent inspects preserved live state before teardown
-- `checkpoint` pause: the test is still healthy, but asks the agent for one explicit go/no-go judgment
-- checkpoint result contract: write only `{"result": true|false, "reason": "..."}` to `result_path`
-- if the result file is missing or invalid, the fixture returns `missing_result` or `invalid_result`; handle that explicitly in the test instead of assuming a boolean
+Do not use `agent_checkpoint` for checks that can be expressed as selectors, text assertions, state polling, or ordinary failure inspection.
 
 ## Run Rules
 
