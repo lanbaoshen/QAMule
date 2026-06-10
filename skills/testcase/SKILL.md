@@ -7,9 +7,31 @@ description: "Inspect existing pytest coverage in tests/. Use when checking whet
 
 Use this skill before writing a new test or doing manual validation if you need to know what is already covered in `tests/`.
 
+## Retrieval Modes
+
+- Use pytest collection to list cases, get node IDs, or filter by file/function name.
+- Use `grep` to find tests by feature, flow, or domain terms.
+- Start with pytest for structural inventory; use `grep` for semantic search.
+
 ## Search Workflow
 
-### 1. Extract Search Terms
+### 1. Choose Retrieval Method
+
+Use pytest collection for structure-oriented requests:
+
+```bash
+uv run pytest tests --collect-only -q
+```
+
+Use selectors such as file path or `-k` for narrower filtering:
+
+```bash
+uv run pytest tests --collect-only -q -k "login"
+```
+
+Use `grep` instead when searching feature words in paths, comments, or test bodies.
+
+### 2. Extract Search Terms
 
 Collect a small set of likely terms from the request:
 
@@ -24,24 +46,26 @@ Example:
 下载|download|app_download
 ```
 
-### 2. Search tests/
+### 3. Search tests/
 
-Search `tests/` by both file path and content. Prefer one regex with alternation instead of multiple passes.
+Search `tests/` by path and content. Prefer one regex with alternation.
 
 ```bash
-rg -n -i "下载|download|app_download" tests
+grep -RniE "下载|download|app_download" tests
 ```
 
-### 3. Summarize Matches
+### 4. Summarize Matches
 
 For each relevant hit, report:
 
 - file path
 - test function name
-- what behavior it appears to cover
+- covered behavior
 - whether the match is direct coverage or only adjacent coverage
 
-### 4. Decide Next Action
+If useful, also report the exact pytest node ID.
+
+### 5. Decide Next Action
 
 - If strong matches exist, reuse or extend those tests.
 - If only partial matches exist, call out the gap explicitly.
@@ -51,7 +75,7 @@ For each relevant hit, report:
 
 When the user asks what is covered or what is missing:
 
-1. List all test files and functions in `tests/`.
+1. Start from `uv run pytest tests --collect-only -q` to list collected files and functions.
 2. Extract short intent from names, docstrings, and comments.
 3. Group matches by feature or flow.
 4. Highlight obvious gaps relevant to the request.
