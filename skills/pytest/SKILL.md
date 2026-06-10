@@ -1,12 +1,12 @@
 ---
 name: pytest
-description: "Define pytest script standards for Android uiautomator2 tests, including file/function structure, run commands, device fixture selection, and pause-on-failure usage. Use when creating or executing pytest tests without business-specific content. Trigger keywords: pytest standard, test template, run pytest, --device, pause-on-failure."
+description: "Define how pytest tests should be executed in QAMule, including run commands, device fixture selection, pause-on-failure, and live checkpoint workflow. Use when running or debugging pytest tests without business-specific content. Trigger keywords: run pytest, debug pytest, --device, pause-on-failure, live pause, checkpoint."
 user-invocable: false
 ---
 
-# Pytest Standard
+# Pytest Runtime
 
-Pytest conventions for Android automation.
+Pytest runtime conventions for Android automation.
 
 ## Multiple Device Control
 

@@ -1,6 +1,7 @@
 ---
 name: dataset
 description: 'Manage VLM trajectory data in dataset/. Use when creating sessions, writing trajectory.json, validating samples, or previewing the dataset.'
+user-invocable: false
 ---
 
 # Dataset Management

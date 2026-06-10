@@ -117,6 +117,11 @@ This copies config files, creates the project skeleton, and installs the base de
 @QAMule Distiller collect one real-device trajectory for opening the Bluetooth settings page in com.android.settings
 ```
 
+**View the dataset in a page:**
+```text
+@QAMule Distiller open the current dataset in a viewer page
+```
+
 **Update the knowledge base:**
 ```text
 /qamule:kb Record that this app cannot be launched reliably through adb and must be entered through the in-app UI flow
@@ -125,16 +130,6 @@ This copies config files, creates the project skeleton, and installs the base de
 **Query the knowledge base:**
 ```text
 /qamule:kb What is the known navigation path for checking the Android system version on this device?
-```
-
-**Review existing coverage:**
-```text
-/qamule:testcase Show the currently covered features for Settings and identify obvious coverage gaps
-```
-
-**Preview Dataset:**
-```text
-/qamule:dataset Preview the latest collected trajectories and summarize the available data quality
 ```
 
 ### Pause on failure
@@ -226,8 +221,8 @@ This is what makes QAMule compound over time: one run validates the present task
 |-------|------|
 | **uiautomator2** | Internal device operation skill, using `u2cli` for tapping, swiping, input, screenshots, and app management |
 | **kb** | Read and write persistent app knowledge: pages, flows, selectors, and abnormal behavior |
-| **pytest** | Internal pytest conventions for script structure, fixture contracts, run modes, pause-on-failure, and agent checkpoints |
-| **testcase** | Look up existing cases before manual testing to avoid duplicate effort |
+| **pytest** | Internal pytest runtime skill for run modes, device binding, pause-on-failure, and agent checkpoints |
+| **pytest-authoring** | Internal pytest authoring skill for testcase boundaries, markers, fixture scope, parametrization |
 | **dataset** | Manage VLM training trajectories: naming, schema, and visual browsing |
 | **init** | One-time project scaffolding |
 
