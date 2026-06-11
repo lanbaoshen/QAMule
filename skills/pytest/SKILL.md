@@ -8,6 +8,10 @@ user-invocable: false
 
 Pytest runtime conventions for Android automation.
 
+## Collect Tests
+
+You can collect tests with `uv run pytest --collect-only` to see the test structure and markers without executing them
+
 ## Multiple Device Control
 
 You can control device via default fixture `d` or define named fixtures for multiple devices:
@@ -30,7 +34,6 @@ one bounded semantic or visual go/no-go decision that cannot be encoded reliably
 ```python
 import pytest
 
-
 def test_checkout_summary(live_pause):
     result = live_pause.checkpoint(task="Task")
     if result.result is None:
@@ -39,6 +42,8 @@ def test_checkout_summary(live_pause):
 ```
 
 Do not use it for checks that can be expressed as selectors, text assertions, state polling, or ordinary failure inspection.
+
+If you want to ignore the existing checkpoint in the test, only check the assertion or selector, you can use `uv run pytest --pause-checkpoint-mock true|false` to control whether the checkpoint will be mocked to always return result `true` or `false` without actually executing the checkpoint task.
 
 ## Workflow
 
@@ -61,7 +66,7 @@ uv run pytest-live-pause watch --run-id={run_id}
 
 You can get the `pause_id` and `kind` of pause by inspecting the stdout of `pytest-live-pause watch`:
     - `checkpoint`: do the requested external `task`, then resume with a result, for example `uv run pytest-live-pause resume {pause_id} --result true --reason "verified by external agent"`
-    - `failure`: inspect the failure state, then resume without a result, for example `uv run pytest-live-pause resume {pause_id}--failure-reason "investigated failure"`
+    - `failure`: inspect the failure state, then resume without a result, for example `uv run pytest-live-pause resume {pause_id} --failure-reason "investigated failure"`
     - `run is no longer active:` the run completed normally; inspect the log and do not resume anything
 
 4. Repeat `pytest-live-pause watch` and `pytest-live-pause resume` until test run completes.

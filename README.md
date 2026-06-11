@@ -98,7 +98,7 @@ copilot plugin install QAMule@lanbaoshen
 /qamule:init
 ```
 
-This copies config files, creates the project skeleton, and installs the base dependencies.
+This initializes a base UV project for QAMule and installs the core dependencies.
 
 ### Usage
 
@@ -138,21 +138,41 @@ When enabled, pytest pauses before teardown after a failure so the agent can ins
 
 This is for cases where logs and screenshots are not enough and the exact failed state still matters.
 
-The default resume signal is `SIGUSR1`, and you can override it with `--pause-resume-signal <SIGNAL>`.
+For agent-driven pytest runs, follow the live pause workflow:
 
-For shell-driven agent runs, QAMule provides `skills/pytest/scripts/monitor.sh` to watch the log and `skills/pytest/scripts/resume.sh` to resume the paused run.
+1. Start pytest through `uv`:
+	```bash
+	uv run pytest [command/options]
+	```
+2. Read `run_id` from the pytest header (for example, `pytest-live-pause: run_id={run_id}`), then watch the run in another terminal:
+	```bash
+	uv run pytest-live-pause watch --run-id={run_id}
+	```
+3. When `watch` stops, inspect `kind` and `pause_id`:
+	- `checkpoint`: complete the requested external task, then resume with a boolean result.
+	- `failure`: follow the `live-pause-failure-triage` workflow to inspect the paused scene, use KB to classify whether the blocker belongs to preconditions, environment, test, product, or an external dependency, then resume with structured failure context.
+	- `run is no longer active`: the run has completed; do not resume anything.
+4. Repeat `watch` and `resume` until the run finishes.
 
-### Agent checkpoints
+The division of responsibility is simple:
 
-QAMule also supports explicit agent checkpoints during a healthy test run. The test can pause at one decision point, ask the agent for a bounded judgment, and then continue.
+- `pytest` defines the runtime protocol, such as how to `watch` and when to `resume`.
+- `live-pause-failure-triage` defines how to investigate a `kind=failure` pause and decide the next action.
+- `kb/` stores reusable project facts such as permission prompts, login prerequisites, ROM quirks, dependency screens, and recovery paths.
 
-Use `agent_checkpoint` when a local assertion alone is not reliable enough, such as judging a transient screen, a visual summary, or an exploratory branch outcome.
+So failure pause is not just about dismissing blockers mechanically. First decide whether the current state is relevant to the test goal, then use KB to judge whether it matches known behavior, and only write back new findings when the observation is stable and reusable.
+
+### Live checkpoints
+
+QAMule also supports explicit reasoning checkpoints during a healthy test run. The test can pause at one decision point, ask for a bounded judgment, and then continue.
+
+Use `live_pause.checkpoint` when a local assertion alone is not reliable enough, such as judging a transient screen, a visual summary, or an exploratory branch outcome.
 
 The contract stays simple: the agent returns a boolean result plus an optional reason, and the test decides how to proceed.
 
-Agent-driven pytest runs still use one workflow: write to a log, let `monitor.sh` detect completion or pause events, and use `resume.sh` when continuation is needed.
+Do not use it for conditions that can be verified by selectors, text assertions, state polling, or ordinary failure inspection.
 
-<img src="./pytest-run-modes-bilingual.excalidraw.svg" alt="QAMule pytest run modes">
+<img src="pytest-run-modes-bilingual.excalidraw.svg" alt="QAMule pytest run modes">
 
 ## Extensibility
 
@@ -221,7 +241,8 @@ This is what makes QAMule compound over time: one run validates the present task
 |-------|------|
 | **uiautomator2** | Internal device operation skill, using `u2cli` for tapping, swiping, input, screenshots, and app management |
 | **kb** | Read and write persistent app knowledge: pages, flows, selectors, and abnormal behavior |
-| **pytest** | Internal pytest runtime skill for run modes, device binding, pause-on-failure, and agent checkpoints |
+| **pytest** | Internal pytest runtime skill for run modes, device binding, pause-on-failure, and live checkpoint workflow |
+| **live-pause-failure-triage** | Internal failure triage skill used only for live pause `failure` stops, combining paused-scene inspection with KB-backed classification and structured resume reasons |
 | **pytest-authoring** | Internal pytest authoring skill for testcase boundaries, markers, fixture scope, parametrization |
 | **dataset** | Manage VLM training trajectories: naming, schema, and visual browsing |
 | **init** | One-time project scaffolding |
@@ -252,6 +273,8 @@ QAMule is a strong fit for teams that need Android QA to move at product speed w
 - [uiautomator2](https://github.com/openatx/uiautomator2) — Android automation library
 - [uiautomator2-cli](https://github.com/lanbaoshen/uiautomator2-cli) — CLI wrapper designed for agent usage
 - [pytest](https://pytest.org/) — structured testing framework
+- [pytest-live-pause](https://github.com/lanbaoshen/pytest-live-pause) — pytest plugin for pause-on-failure and live checkpoint workflow
+- [pytest-u2device](https://github.com/lanbaoshen/pytest-u2device) — pytest plugin for device binding and uiautomator2 interaction
 
 ## License
 

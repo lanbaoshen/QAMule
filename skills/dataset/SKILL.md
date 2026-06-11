@@ -73,7 +73,7 @@ bash <path-to-this-skill>/scripts/validate.sh dataset/{session_dir}/
 bash <path-to-this-skill>/scripts/validate.sh dataset/
 ```
 
-### Preview Dataset with Viewer for Human Evaluation
+### Preview Dataset in Web UI
 
 ```bash
 uv run <path-to-this-skill>/scripts/viewer.py dataset/

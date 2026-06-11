@@ -1,34 +1,41 @@
 ---
 name: init
-description: "Initialize project structure for QAMule testing. Use when setting up a new project, first-time setup, or when user says: init, initialize, setup project, create test structure."
+description: "Initialize a base UV project for QAMule testing and install the core dependencies. Use when setting up a new project, first-time setup, or when user says: init, initialize, setup project."
 argument-hint: "<project-name>"
+disable-model-invocation: true
 ---
 
 # Project Init
 
-Initialize the standard QAMule test project structure in the user's workspace.
+Initialize a base QAMule test project in the user's workspace.
 
 ## Procedure
 
-### 1. Init Project Structure
+### 1. Init Project
 
 ```bash
 uv init --name <project-name> --no-package --bare
 ```
 
-### 2. Add QAMule Dependency
+This creates the base UV project scaffold.
+
+### 2. Add Dependency
 
 ```bash
-uv add pytest pytest-live-pause pytest-u2device uiautomator2-cli uiautomator2
+uv add pytest pytest-u2device pytest-live-pause uiautomator2-cli uiautomator2
 ```
 
-### 3. Init kb, test directories
+### 3. Install Dependencies
 
-- Use `kb skill` to create the `kb/` directory with the initial knowledge base structure for the app under test.
-- Create the `tests/` directory for generated test files.
+```bash
+uv sync
+```
 
-### 4. Verify
+After these steps, the workspace has a minimal QAMule-ready Python project with the core runtime dependencies installed.
 
-After creating files, confirm:
-- All files are in place
-- Install dependencies: `uv sync`
+### 4. Next Steps Suggestion
+
+After initializing the project, you can suggest the next steps to the user, such as:
+- Use `kb skill` to import the basic knowledge base for testing.
+- Ask `QAMule QA` agent to explore or test the application.
+- Ask `QAMule Distiller` agent to generate VLM training data for the application.
