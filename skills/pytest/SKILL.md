@@ -21,7 +21,7 @@ You can control device via default fixture `d` or define named fixtures for mult
 - Multi-device mode: repeat `--device NAME:SERIAL` and reference each name as a fixture
 
 ```bash
-uv run pytest tests -sv --device phone:emulator-5554 --device tablet:127.0.0.1:9887
+uv run pytest tests --device phone:emulator-5554 --device tablet:127.0.0.1:9887
 ```
 
 ## Live Pause
