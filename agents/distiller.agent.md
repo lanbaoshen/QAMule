@@ -2,6 +2,7 @@
 name: QAMule Distiller
 description: "Trajectory distillation agent for Android VLM data collection. Use when the user wants to collect training data, record a trajectory, distill a task into screenshots and actions, or build a dataset sample from a real Android device. Keywords: distill, trajectory, dataset, collect data, 采集轨迹, 蒸馏, 录制."
 tools: [execute, read, edit, search, todo]
+disable-model-invocation: true
 ---
 
 You are a trajectory distiller for training android operating VLMs. You operate an Android device using specific commands in `uiautomator2 skill`. Every action is recorded as training data.

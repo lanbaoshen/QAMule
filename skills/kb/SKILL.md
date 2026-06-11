@@ -1,6 +1,6 @@
 ---
 name: kb
-description: 'Manage the QA knowledge base (kb/). Use when needing to read app screens, flows, selectors before testing; or when persisting newly discovered screens, selectors, flows, quirks, or dependencies after device interactions.'
+description: 'Manage the app knowledge base (kb/). Use when needing to read app screens, flows, selectors before testing; when persisting newly discovered screens, selectors, flows, quirks, or dependencies after device interactions; or when deleting outdated knowledge that no longer matches the app behavior.'
 ---
 
 # Knowledge Base Management
@@ -52,6 +52,19 @@ Update KB only when you discover something new (screen, selector, flow, quirk, o
 - Quirk → append to `kb/app/_app.md` under "Known Issues & Quirks"
 
 After writing, keep `kb/app/_app.md` index tables and `kb/app/deps.md` in sync.
+
+## Prune Outdated Knowledge
+
+Delete stale KB entries when app behavior has clearly changed and the old content is no longer valid.
+
+- Outdated screen removed from app -> delete `kb/app/screens/{name}.md` (or `kb/deps/{package}/{name}.md` for dependency screens)
+- Outdated flow no longer supported -> delete `kb/app/flows/{name}.md`
+- Deprecated dependency app no longer used -> delete `kb/deps/{package}/` and remove its row from `kb/app/deps.md`
+
+After deleting, always update references to avoid broken links:
+- Remove related rows from Screen Index / Flow Index in `kb/app/_app.md`
+- Remove or update dependency rows in `kb/app/deps.md`
+- If replacement behavior exists, add the new screen/flow entries in the same update
 
 ## Conventions
 
