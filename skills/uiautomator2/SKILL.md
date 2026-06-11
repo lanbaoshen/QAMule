@@ -12,14 +12,13 @@ user-invocable: false
 Use this skill as the execution layer for Android UI.
 You have access to `uv run u2cli`, a CLI for controlling Android devices via the uiautomator2.
 
-## Screenshot-First QA Workflow
+## QA Usage Guidance
 
-When this skill is used for QA, screenshots are the default observation artifact rather than an occasional extra.
+When this skill is used for QA, use screenshots to understand the live screen state and use selectors to interact whenever practical.
 
-- Take a screenshot before the first device action so you are grounded in the actual starting state.
-- Take another screenshot after any action that should change the UI, and before reporting a verification result.
-- Refresh the screenshot whenever the scene looks blocked, surprising, or hard to explain from selectors alone.
-- Prefer screenshot plus hierarchy together when element structure matters; do not rely on hierarchy-only reads if visual context is important.
+- Capture a screenshot before the first action and refresh it after state-changing actions or when the UI is unexpected.
+- Prefer selector-based actions such as `click`, `long-click`, `wait`, `exists`, and `xpath-click` with stable selectors.
+- Use coordinate-based actions only as a fallback when no reliable selector or XPath is available.
 
 ## Target Device Selection
 

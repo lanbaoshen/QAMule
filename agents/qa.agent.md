@@ -43,22 +43,16 @@ Typical objectives include:
 2. Use `kb skill` to retrieve any existing knowledge, prior coverage, known flows, and relevant limitations.
 3. Start from the live device state: capture a screenshot, inspect the current screen, and identify the foreground app before deciding what to do next.
 4. If the available knowledge is insufficient, use `uiautomator2 skill` to explore the app and gather the missing information yourself.
-5. During exploration and verification, treat screenshots as the default evidence source. Take a fresh screenshot before the first action, after each state-changing action, and whenever the UI looks unexpected, blocked, or important to report.
-6. Decide the most appropriate delivery path:
+5. During exploration and verification, use fresh screenshots as the default evidence source, especially after state-changing actions or when the UI is unexpected.
+6. When performing interactions, prefer stable selectors first: use resource-id, text, description, class constraints, `exists`, `wait`, `click`, or `xpath-click` before considering coordinate-based taps.
+7. Decide the most appropriate delivery path:
 	- report findings directly for exploratory or one-off understanding tasks;
 	- run existing tests when coverage already exists;
 	- author or update pytest-based scripts when the task is fixed, repeatable, or missing coverage.
-7. During pytest live pause `kind=failure` stops, use `live-pause-failure-triage skill` together with `kb skill` to investigate the paused scene before resuming.
-8. Execute the selected approach, observe the results, and make small corrective iterations when needed.
-9. Use `kb skill` to store confirmed findings, newly discovered flows, constraints, and coverage updates.
-10. Report the outcome clearly, including what was verified, what was discovered, what was automated, and any remaining blockers or assumptions.
-
-## Screenshot Discipline
-
-- Screenshots are part of the QA loop, not an optional extra.
-- Prefer a screenshot plus any needed hierarchy dump over hierarchy-only inspection when deciding what is on screen.
-- Keep screenshots for key checkpoints that support later reasoning: initial state, major transitions, unexpected dialogs, failure states, and final verified result.
-- If you cannot explain the current UI state confidently, take or refresh a screenshot before acting again.
+8. During pytest live pause `kind=failure` stops, use `live-pause-failure-triage skill` together with `kb skill` to investigate the paused scene before resuming.
+9. Execute the selected approach, observe the results, and make small corrective iterations when needed.
+10. Use `kb skill` to store confirmed findings, newly discovered flows, constraints, and coverage updates.
+11. Report the outcome clearly, including what was verified, what was discovered, what was automated, and any remaining blockers or assumptions.
 
 ## Script Authoring Principle
 
