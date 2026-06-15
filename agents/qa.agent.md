@@ -65,6 +65,12 @@ You should:
 - refine the script until it is stable enough for the requested task;
 - prefer reusable, maintainable scripts over ad hoc command sequences.
 
+## Pytest Execution Requirement
+
+Whenever you execute pytest, use the `pytest skill` workflow exactly. Start pytest through `uv run pytest` in async mode, capture the printed `pytest-live-pause: run_id=...`, then immediately run `uv run pytest-live-pause watch --run-id={run_id}` in a separate terminal in sync mode with no timeout.
+
+The watch command is the required monitor for pytest execution. Do not rely only on the original pytest terminal output, and do not leave a pytest run waiting without an active watch cycle. Repeat watch and resume steps until the run is no longer active or has completed.
+
 ## Autonomy Boundaries
 
 - If a step fails or you encounter a fixable problem, try up to **3 times** before stopping.

@@ -43,9 +43,11 @@ def test_checkout_summary(live_pause):
 
 Do not use it for checks that can be expressed as selectors, text assertions, state polling, or ordinary failure inspection.
 
-If you want to ignore the existing checkpoint in the test, only check the assertion or selector, you can use `uv run pytest --pause-checkpoint-mock true|false` to control whether the checkpoint will be mocked to always return result `true` or `false` without actually executing the checkpoint task.
+Do not use `--pause-checkpoint-mock` for normal test execution. Use it only for local partial validation, such as when authoring scripts or doing an initial smoke check where the checkpoint itself is not the target of verification. In those cases, `uv run pytest --pause-checkpoint-mock true|false` can mock checkpoint results as `true` or `false` without executing the checkpoint task.
 
-## Workflow
+## Mandatory Watch Workflow
+
+For every non-collection pytest execution, the `pytest-live-pause watch` step is mandatory. Do not monitor a running pytest process only through the original pytest terminal output. The watch process is the authoritative way to detect completion, checkpoint pauses, and failure pauses.
 
 1. Start every pytest run through `uv` in `async` mode:
 
@@ -53,7 +55,7 @@ If you want to ignore the existing checkpoint in the test, only check the assert
 uv run pytest [command/options]
 ```
 
-2. After pytest starts, it will print the live pause run id on the header like `pytest-live-pause: run_id={run_id}`, you should use `pytest-live-pause watch` command to monitor the run state in a different terminal in `sync` mode with no `timeout`:
+2. After pytest starts, it will print the live pause run id on the header like `pytest-live-pause: run_id={run_id}`. Immediately use `pytest-live-pause watch` to monitor the run state in a different terminal in `sync` mode with no `timeout`:
 
 ```bash
 uv run pytest-live-pause watch --run-id={run_id}
@@ -69,4 +71,4 @@ You can get the `pause_id` and `kind` of pause by inspecting the stdout of `pyte
     - `failure`: inspect the failure state, then resume without a result, for example `uv run pytest-live-pause resume {pause_id} --failure-reason "investigated failure"`
     - `run is no longer active:` the run completed normally; inspect the log and do not resume anything
 
-4. Repeat `pytest-live-pause watch` and `pytest-live-pause resume` until test run completes.
+4. Repeat `pytest-live-pause watch` and `pytest-live-pause resume` until test run completes. Do not stop after starting pytest unless a watch command has confirmed that the run is no longer active or has completed.
