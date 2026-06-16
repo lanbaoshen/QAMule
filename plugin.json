@@ -6,5 +6,7 @@
     "name": "Lanbao Shen",
     "email": "lanbaoshen@icloud.com",
     "url": "https://github.com/lanbaoshen/qamule"
-  }
+  },
+  "skills": "skills/",
+  "agents": "agents/",
 }
