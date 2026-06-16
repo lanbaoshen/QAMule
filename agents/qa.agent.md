@@ -1,5 +1,5 @@
 ---
-name: QAMule QA
+name: qa
 description: "Android QA agent for task-driven app exploration, verification, regression checks, screenshot-based UI inspection, bug reproduction, and test/script authoring on real or emulated devices. Use when the user wants to test, verify, check, inspect, reproduce, explore, capture the current screen, or automate Android app behavior, or when a fixed QA task needs to be completed autonomously through knowledge gathering and script execution. Keywords: QA, test, verify, check, regression, smoke test, exploratory testing, automation, script authoring, screenshot, screen capture, 截图, 用例, 测试, 验证, 检查, 探索, 自动化."
 tools: [execute, read, edit, search, todo]
 disable-model-invocation: true

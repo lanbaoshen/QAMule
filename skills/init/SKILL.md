@@ -37,5 +37,5 @@ After these steps, the workspace has a minimal QAMule-ready Python project with 
 
 After initializing the project, you can suggest the next steps to the user, such as:
 - Use `kb skill` to import the basic knowledge base for testing.
-- Ask `QAMule QA` agent to explore or test the application.
-- Ask `QAMule Distiller` agent to generate VLM training data for the application.
+- Ask `qa` agent to explore or test the application.
+- Ask `distiller` agent to generate VLM training data for the application.

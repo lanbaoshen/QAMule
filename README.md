@@ -104,22 +104,22 @@ This initializes a base UV project for QAMule and installs the core dependencies
 
 **Explore a page:**
 ```text
-@QAMule QA explore the Settings app home page, identify the main sections, and summarize actionable elements
+@qa explore the Settings app home page, identify the main sections, and summarize actionable elements
 ```
 
 **Test a feature:**
 ```text
-@QAMule QA validate that the Bluetooth toggle in Settings can be enabled and disabled correctly, and report any unexpected system behavior
+@qa validate that the Bluetooth toggle in Settings can be enabled and disabled correctly, and report any unexpected system behavior
 ```
 
 **Collect one training trajectory:**
 ```text
-@QAMule Distiller collect one real-device trajectory for opening the Bluetooth settings page in com.android.settings
+@distiller collect one real-device trajectory for opening the Bluetooth settings page in com.android.settings
 ```
 
 **View the dataset in a page:**
 ```text
-@QAMule Distiller open the current dataset in a viewer page
+@distiller open the current dataset in a viewer page
 ```
 
 **Update the knowledge base:**
@@ -209,7 +209,7 @@ Observe -> Plan -> Execute -> Verify -> Learn -> Record
 
 The point is straightforward: the test starts from the live product, and scripts appear later only when the behavior is stable enough to be worth reusing.
 
-<img src="./qa-agent-workflow-bilingual.excalidraw.svg" alt="QAMule QA agent workflow">
+<img src="./qa-agent-workflow-bilingual.excalidraw.svg" alt="QA agent workflow">
 
 ### Distiller Agent
 
@@ -217,7 +217,7 @@ Distiller is the data layer. It is focused on **capturing replayable real-device
 
 It records screenshots, actions, reasoning, foreground app, and results into `dataset/`. It does not generate pytest scripts. Its job is to preserve real interaction behavior, including missteps, corrections, waiting, and recovery, so teams can build training data from what actually happened on the device.
 
-<img src="./distiller-agent-workflow-bilingual.excalidraw.svg" alt="QAMule distiller workflow">
+<img src="./distiller-agent-workflow-bilingual.excalidraw.svg" alt="Distiller workflow">
 
 ### Knowledge Base
 
