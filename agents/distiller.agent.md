@@ -22,7 +22,7 @@ PS: Don't read existing dataset trajectories — this is a fresh run, the goal i
 ### Phase 1: Execute
 
 Loop:
-1. Screenshot → save to: `dataset/{session_dir}/step_{NNN}.png`
+1. Screenshot → save to: `dataset/{session_dir}/step_{NNN}.jpg`
 2. Get `current-app` info.
 3. Observe screenshot & current app info, `thought`, decide `action`.
 4. Use `dataset skill` **Append Step** to append the step with screenshot, current-app, thought, action, and step-success.

@@ -9,8 +9,8 @@ Usage examples:
     --resolution 1080 2400 \
     --android 14
 
-  python skills/dataset/scripts/trajectory.py append dataset/open_wifi_20260514_101530 \
-    --screenshot step_001.png \
+    python skills/dataset/scripts/trajectory.py append dataset/open_wifi_20260514_101530 \
+        --screenshot step_001.jpg \
     --current-app com.android.settings/.Settings \
     --thought "I can see the Settings home screen and the Network section." \
     --action '{"type":"click","x":540,"y":620}'
@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import NoReturn
 
 
-STEP_PNG_RE = re.compile(r"^step_(\d{3})\.png$")
+STEP_JPG_RE = re.compile(r"^step_(\d{3})\.jpg$")
 TASK_SLUG_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
 TERMINAL_ACTIONS = {"finish", "impossible"}
 
@@ -75,7 +75,7 @@ def write_trajectory(trajectory_path: Path, data: dict) -> None:
 
 
 def expected_screenshot_name(step_number: int) -> str:
-    return f"step_{step_number:03d}.png"
+    return f"step_{step_number:03d}.jpg"
 
 
 def parse_action(raw_action: str) -> dict:
@@ -153,8 +153,8 @@ def cmd_append(args: argparse.Namespace) -> int:
     expected_name = expected_screenshot_name(step_number)
     screenshot_name = args.screenshot
 
-    if not STEP_PNG_RE.match(screenshot_name):
-        fail("screenshot must match pattern 'step_{NNN}.png'")
+    if not STEP_JPG_RE.match(screenshot_name):
+        fail("screenshot must match pattern 'step_{NNN}.jpg'")
     if screenshot_name != expected_name:
         fail(f"screenshot for step {step_number} must be named {expected_name}")
     if not (session_dir / screenshot_name).is_file():
@@ -219,7 +219,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     append_parser = subparsers.add_parser("append", help="append one recorded step to trajectory.json")
     append_parser.add_argument("session_dir", help="session directory that already contains trajectory.json")
-    append_parser.add_argument("--screenshot", required=True, help="step screenshot file name, e.g. step_001.png")
+    append_parser.add_argument("--screenshot", required=True, help="step screenshot file name, e.g. step_001.jpg")
     append_parser.add_argument("--current-app", required=True, help="current package/activity string")
     append_parser.add_argument("--thought", required=True, help="observation and reasoning for this step")
     append_parser.add_argument("--action", required=True, help="JSON object describing the action")

@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 
 SESSION_DIR_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*_\d{8}_\d{6}$")
-STEP_PNG_RE = re.compile(r"^step_(\d{3})\.png$")
+STEP_JPG_RE = re.compile(r"^step_(\d{3})\.jpg$")
 
 ACTION_REQUIRED_PARAMS = {
     "app_start": {"app"},
@@ -262,9 +262,9 @@ for traj_file in trajectory_files:
         if not is_non_empty_string(screenshot):
             add_error(step_loc, "field 'screenshot' must be a non-empty string")
         else:
-            matched = STEP_PNG_RE.match(screenshot)
+            matched = STEP_JPG_RE.match(screenshot)
             if not matched:
-                add_error(step_loc, "screenshot must match pattern 'step_{NNN}.png'")
+                add_error(step_loc, "screenshot must match pattern 'step_{NNN}.jpg'")
             else:
                 shot_index = int(matched.group(1))
                 if shot_index != index:
@@ -297,27 +297,38 @@ for traj_file in trajectory_files:
                 f"terminal action appears at step {last_terminal}, but it is not the final step",
             )
 
-    png_files = sorted(
-        p.name for p in session_dir.iterdir() if p.is_file() and p.suffix.lower() == ".png"
+    jpg_files = sorted(
+        p.name for p in session_dir.iterdir() if p.is_file() and p.suffix.lower() == ".jpg"
     )
-    valid_step_pngs = []
-    invalid_png_names = []
+    legacy_step_images = sorted(
+        p.name
+        for p in session_dir.iterdir()
+        if p.is_file() and p.name.startswith("step_") and p.suffix.lower() != ".jpg"
+    )
+    valid_step_jpgs = []
+    invalid_jpg_names = []
 
-    for name in png_files:
-        match = STEP_PNG_RE.match(name)
-        if match:
-            valid_step_pngs.append((name, int(match.group(1))))
-        else:
-            invalid_png_names.append(name)
-
-    if invalid_png_names:
+    if legacy_step_images:
         add_error(
             traj_loc,
-            "PNG file name must match 'step_{NNN}.png': " + ", ".join(invalid_png_names),
+            "step screenshot files must use .jpg: " + ", ".join(legacy_step_images),
         )
 
-    if valid_step_pngs:
-        indices = {idx for _, idx in valid_step_pngs}
+    for name in jpg_files:
+        match = STEP_JPG_RE.match(name)
+        if match:
+            valid_step_jpgs.append((name, int(match.group(1))))
+        else:
+            invalid_jpg_names.append(name)
+
+    if invalid_jpg_names:
+        add_error(
+            traj_loc,
+            "JPG file name must match 'step_{NNN}.jpg': " + ", ".join(invalid_jpg_names),
+        )
+
+    if valid_step_jpgs:
+        indices = {idx for _, idx in valid_step_jpgs}
         max_idx = max(indices)
         missing = [i for i in range(1, max_idx + 1) if i not in indices]
         if missing:
@@ -326,8 +337,8 @@ for traj_file in trajectory_files:
                 "missing screenshot indices in session folder: " + summarize_indices(missing),
             )
 
-    valid_png_names = {name for name, _ in valid_step_pngs}
-    unreferenced = sorted(valid_png_names - referenced_screenshots)
+    valid_jpg_names = {name for name, _ in valid_step_jpgs}
+    unreferenced = sorted(valid_jpg_names - referenced_screenshots)
     if unreferenced:
         add_warning(
             traj_loc,

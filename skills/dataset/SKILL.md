@@ -13,7 +13,7 @@ Use this skill to create and validate VLM trajectory sessions in `dataset/`.
 ```
 dataset/
   {session_dir}/
-    step_001.png … step_NNN.png
+    step_001.jpg … step_NNN.jpg
     trajectory.json
 ```
 
@@ -35,13 +35,13 @@ It will print the created session directory.
 
 ### Screenshot
 
-Save screenshots as `step_{NNN}.png` (3-digit zero padding) in the session directory.
+Save screenshots as `step_{NNN}.jpg` (3-digit zero padding) in the session directory.
 
 ### Append Steps
 
 ```bash
 uv run <path-to-this-skill>/scripts/trajectory.py append dataset/{session_dir} \
-  --screenshot step_001.png \
+  --screenshot step_001.jpg \
   --current-app com.example.app/.MainActivity \
   --thought "I can see the main screen and the login button is visible." \
   --action '{"type":"click","x":512,"y":750}' \

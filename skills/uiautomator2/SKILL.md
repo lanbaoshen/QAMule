@@ -38,7 +38,7 @@ uv run u2cli -s emulator-5554 device-info
 ### Inspect UI
 
 - `dump-hierarchy`: Dump current UI hierarchy in XML format for analysis and element selection. The output is compressed by u2cli before returning. You can combine this command with `grep` command to find specific elements, like `uv run u2cli dump-hierarchy | grep -i "keyword"`.
-- `screenshot`: Capture current screen and save to a local file. The output is the file path and size of the screenshot. Example: `uv run u2cli screenshot /tmp/screenshot.png`.
+- `screenshot`: Capture current screen and save to a local file. The output is the file path and size of the screenshot. Example: `uv run u2cli screenshot /tmp/screenshot.jpg`.
 - `current-app`: Get the current foreground app's package name, activity and pid.
 
 ### Click & Swipe & Wait & Exists
