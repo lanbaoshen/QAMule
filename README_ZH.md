@@ -22,6 +22,8 @@
   <a href="LICENSE">MIT License</a>
 </p>
 
+> **维护说明：** 当前仓库已归档，QAMule 后续将在 [qamule/qamule](https://github.com/qamule/qamule) 维护。
+
 ---
 
 ## 认识 QAMule
