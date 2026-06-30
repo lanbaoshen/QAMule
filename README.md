@@ -22,6 +22,8 @@
 	<a href="LICENSE">MIT License</a>
 </p>
 
+> **Maintenance notice:** This repository has been archived. QAMule is now maintained at [qamule/qamule](https://github.com/qamule/qamule).
+
 ---
 
 ## Meet QAMule
