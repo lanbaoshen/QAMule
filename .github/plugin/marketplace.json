@@ -1,0 +1,12 @@
+{
+  "name": "qamule",
+  "metadata": {
+    "description": "QAMule Marketplace",
+    "version": "0.1.0"
+  },
+  "owner": {
+    "name": "Lanbao Shen",
+    "email": "lanbaoshen@icloud.com"
+  },
+  "plugins": []
+}

@@ -1,0 +1,5 @@
+.agents
+.vscode
+.venv
+.cache
+.DS_Store
