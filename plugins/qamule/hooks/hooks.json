@@ -4,12 +4,7 @@
     "sessionStart": [
       {
         "type": "command",
-        "bash": "if test -f qamule.lock; then bash \"${CLAUDE_PLUGIN_ROOT}/scripts/inject-android-devices.sh\"; fi",
-        "cwd": "."
-      },
-      {
-        "type": "command",
-        "bash": "if test -f qamule.lock; then uv run \"${CLAUDE_PLUGIN_ROOT}/scripts/inject-knowledge-base.py\"; fi",
+        "bash": "if test -f qamule.lock; then uv run \"${CLAUDE_PLUGIN_ROOT}/scripts/inject-session-context.py\"; fi",
         "cwd": "."
       }
     ]
