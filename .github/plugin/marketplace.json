@@ -20,6 +20,12 @@
       "description": "QAMule dispcap plugin, provides device capture.",
       "version": "0.1.0",
       "source": "./plugins/qamule-dispcap"
+    },
+    {
+      "name": "qamule-jira",
+      "description": "QAMule Jira plugin, provides Jira integration for issue tracking and test management.",
+      "version": "0.1.0",
+      "source": "./plugins/qamule-jira"
     }
   ]
 }
