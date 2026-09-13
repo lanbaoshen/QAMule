@@ -19,6 +19,5 @@ escaped_device_output="$(
         { printf "%s", json_escape($0) }
     '
 )"
-
-printf '{"systemMessage":"Android device list injected from adb devices.\\n%s","hookSpecificOutput":{"additionalContext":"%s"}}\n' \
-    "$escaped_device_output" "$escaped_device_output"
+printf '{"systemMessage":"Android device list injected from adb devices.\\n%s","hookSpecificOutput":{"additionalContext":"%s"},"additionalContext": "%s"}\n' \
+    "$escaped_device_output" "$escaped_device_output" "$escaped_device_output"

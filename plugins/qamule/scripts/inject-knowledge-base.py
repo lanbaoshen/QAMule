@@ -57,4 +57,4 @@ system_message = (
     f"Injected context: {injected_character_count} characters, approximately {estimated_token_count} tokens."
 )
 
-print(json.dumps({"systemMessage": system_message, "hookSpecificOutput": {"additionalContext": additional_context}}))
+print(json.dumps({"systemMessage": system_message, "hookSpecificOutput": {"additionalContext": additional_context}, "additionalContext": additional_context}))
