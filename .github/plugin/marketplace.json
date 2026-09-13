@@ -26,6 +26,12 @@
       "description": "QAMule Jira plugin, provides Jira integration for issue tracking and test management.",
       "version": "0.1.0",
       "source": "./plugins/qamule-jira"
+    },
+    {
+      "name": "qamule-scholar",
+      "description": "QAMule Scholar plugin, provides recording and knowledge extraction for complex test scenarios.",
+      "version": "0.1.0",
+      "source": "./plugins/qamule-scholar"
     }
   ]
 }
