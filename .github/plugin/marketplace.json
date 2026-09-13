@@ -14,6 +14,12 @@
       "description": "QAMule main plugin, provides QA workflows for device exploration, pytest testing, failure triage, and reusable test knowledge.",
       "version": "0.1.0",
       "source": "./plugins/qamule"
+    },
+    {
+      "name": "qamule-dispcap",
+      "description": "QAMule dispcap plugin, provides device capture.",
+      "version": "0.1.0",
+      "source": "./plugins/qamule-dispcap"
     }
   ]
 }
