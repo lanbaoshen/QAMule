@@ -47,7 +47,7 @@ They create directories on demand at `pytest-artifacts/<session-id>/<sequence>-<
 
 ## Pause Protocol
 
-Use `--pause-on-failure` only to inspect and capture failures in the current test run.
+Use `--pause-on-failure` only to inspect and capture failures in the current test run. (Only used when user specifies it)
 
 ```bash
 uv run pytest tests --pause-on-failure
